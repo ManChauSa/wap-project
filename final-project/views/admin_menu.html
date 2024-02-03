@@ -1,0 +1,11 @@
+<div>
+    <% for(let opt of food){ %>
+        <h4><%= opt.title %></h4>
+        <img src="<%= opt.image %>" alt="pizza_img" width="100px" height="100px">
+        <div><%= opt.description %></div>
+        <br>
+        <div><%= opt.price %> $</div>
+        <button>Change</button>
+    <% } %>
+</div>
+<button> ADD NEW </button>

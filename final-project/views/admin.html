@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+        function view(obj){
+            $.ajax({
+                "url": $(obj).attr("data"),
+                "type": "GET",
+                "success": getSuccess,
+                "error": getFailed
+                });
+        }
+        function getSuccess(data){
+            $("div[name='data_screen']").html(data);
+        }
+        function getFailed(xhr, status, exception){
+            console.log(xhr, status, exception);
+        }
+    </script>
+    <style>
+        .outer_box{
+            display: grid;
+            grid-template-columns: 1fr 5fr;
+        }
+        .nav_pane{
+            background-color: salmon;
+        }
+        body{
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="outer_box">
+        <div class="nav_pane">
+            <div onclick="view(this)" data="menu">Menu</div>
+            <!-- <div onclick="view(this)" data="product">Products chart</div> -->
+            <!-- <div onclick="view(this)" data="users">Users chart</div> -->
+            <div onclick="view(this)" data="employees">Employees</div>
+            <div>Logout</div>
+        </div>
+        <div name="data_screen">
+        </div>
+    </div>
+</body>
+</html>
