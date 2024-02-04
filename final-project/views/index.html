@@ -4,11 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="/css/index.css" />
-
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Roboto:wght@100&display=swap"
       rel="stylesheet"
     />
     <link
@@ -23,27 +24,68 @@
       src="https://kit.fontawesome.com/34644578d6.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
     <title>Home Page</title>
   </head>
   <body>
+    <nav class="nav">
+      <div>
+        <ul class="nav-list">
+          <li><a href="#" class="nav-list-item">Home</a></li>
+          <li><a href="#" class="nav-list-item">Menu</a></li>
+          <li><a href="#" class="nav-list-item">About</a></li>
+          <li><a href="#" class="nav-list-item">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-items">
+        <% if(username) {%>
+        <span class="material-symbols-outlined cart" onclick="openCheckout()">
+          shopping_cart <span class="total-number"><%=size%></span>
+        </span>
+        <%}%> <% if(!username) {%>
+        <a href="/login" class="nav-list-item">Login</a>
+        <a href="/signup" class="nav-list-item">Signup</a>
+        <%} else {%>
+        <button class="nav-list-item btn-logout" onclick="logout()">
+          Logout
+        </button>
+        <%} %>
+      </div>
+    </nav>
+
+    <div class="popup" id="pleaseLogin">
+      <p>Please <a href="/login">Login</a> before order!</p>
+      <button class="btn-close" type="button" onclick="closePopup()">
+        Close
+      </button>
+    </div>
+
+    <div class="cart-popup">
+      <div style="display: flow-root">
+        <button
+          style="float: right"
+          class="btn-close"
+          type="button"
+          onclick="closeCheckout()"
+        >
+          X
+        </button>
+      </div>
+
+      <div class="cart-items">
+        <% if(cart) {%> <%for(const item of cart) {%>
+        <div class="cart-item">
+          <p class="item-title"><%=item.title %></p>
+          <p class="item quantity">x<%=item.quantity %></p>
+        </div>
+        <% } %> <%}%>
+      </div>
+
+      <button class="btn-checkout" type="button">Checkout</button>
+    </div>
     <header>
-      <nav class="nav">
-        <div>
-          <ul class="nav-list">
-            <li><a href="#" class="nav-list-item">Home</a></li>
-            <li><a href="#" class="nav-list-item">Menu</a></li>
-            <li><a href="#" class="nav-list-item">About</a></li>
-            <li><a href="#" class="nav-list-item">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="nav-items">
-          <a href="/cart" class="material-symbols-outlined cart"> shopping_cart </a>
-          <a href="#" class="nav-list-item">Login</a>
-          <a href="#" class="nav-list-item">Signup</a>
-        </div>
-      </nav>
-
       <div class="title">
         <h1><span>Love </span><span>To Eat</span></h1>
 
@@ -71,82 +113,49 @@
           </span>
         </h1>
         <div class="menu-content">
-          <div class="menu-card-sl">
-            <img src="../img/classic-cheese-pizza-recipe-2-64429a0cb408b.jpg" />
+          <% for(let i = 0; i < 3; i++) {%>
+          <div class="menu-card-sl" id="<%=products[i].id %>">
+            <img src="<%=products[i].img  %>" />
             <div class="menu-card-content">
-              <h4>NEW Hot Honey Wings</h4>
-              <p>Habanero-infused honey sauce & Cajun Style Dru Rub</p>
-              <button type="button" class="btn-order">Order</button>
+              <h4><%=products[i].title %></h4>
+              <p><%=products[i].description %></p>
+              <button type="button" class="btn-order" onclick="order(this)">
+                Order
+              </button>
             </div>
           </div>
-          <div class="menu-card-sl">
-            <img
-              src="../img/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2019__09__easy-pepperoni-pizza-lead-3-8f256746d649404baa36a44d271329bc.jpg"
-            />
-            <div class="menu-card-content">
-              <h4>NEW Hot Honey Wings</h4>
-              <p>Habanero-infused honey sauce & Cajun Style Dru Rub</p>
-              <button type="button" class="btn-order">Order</button>
-            </div>
-          </div>
-          <div class="menu-card-sl">
-            <img src="../img/pizza-recipe-1.jpg" />
-            <div class="menu-card-content">
-              <h4>NEW Hot Honey Wings</h4>
-              <p>Habanero-infused honey sauce & Cajun Style Dru Rub</p>
-              <button type="button" class="btn-order">Order</button>
-            </div>
-          </div>
+
+          <%} %>
         </div>
 
         <div class="menu-content">
-          <div class="menu-card-bg">
-            <img src="../img/classic-cheese-pizza-recipe-2-64429a0cb408b.jpg" />
+          <% for(let i = 3; i < 5; i++) {%>
+          <div class="menu-card-bg" id="<%=products[i].id %>">
+            <img src="<%=products[i].img  %>" />
             <div class="menu-card-content">
-              <h4>NEW Hot Honey Wings</h4>
-              <p>Habanero-infused honey sauce & Cajun Style Dru Rub</p>
-              <button type="button" class="btn-order">Order</button>
+              <h4><%=products[i].title %></h4>
+              <p><%=products[i].description %></p>
+              <button type="button" class="btn-order" onclick="order(this)">
+                Order
+              </button>
             </div>
           </div>
-          <div class="menu-card-bg">
-            <img
-              src="../img/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2019__09__easy-pepperoni-pizza-lead-3-8f256746d649404baa36a44d271329bc.jpg"
-            />
-            <div class="menu-card-content">
-              <h4>NEW Hot Honey Wings</h4>
-              <p>Habanero-infused honey sauce & Cajun Style Dru Rub</p>
-              <button type="button" class="btn-order">Order</button>
-            </div>
-          </div>
+
+          <%} %>
         </div>
         <h1 class="mg-top-4 bd-top">Popular</h1>
         <div class="popular-content">
-          <div class="popular-card">
-            <img src="../img/classic-cheese-pizza-recipe-2-64429a0cb408b.jpg" />
+          <% for(let i = 0; i < topThreePopularProducts.length; i++) {%>
+          <%if(topThreePopularProducts[i].isPopular) {%>
+          <div class="popular-card" id="<%=topThreePopularProducts[i].id  %>">
+            <img src="<%=topThreePopularProducts[i].img  %>" />
             <div class="popular-card-content">
-              <h4>NEW Hot Honey Wings</h4>
-              <p>Habanero-infused honey sauce & Cajun Style Dru Rub</p>
+              <h4><%=topThreePopularProducts[i].title %></h4>
+              <p><%=topThreePopularProducts[i].description %></p>
               <a href="#">See More </a>
             </div>
           </div>
-          <div class="popular-card">
-            <img
-              src="../img/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2019__09__easy-pepperoni-pizza-lead-3-8f256746d649404baa36a44d271329bc.jpg"
-            />
-            <div class="popular-card-content">
-              <h4>NEW Hot Honey Wings</h4>
-              <p>Habanero-infused honey sauce & Cajun Style Dru Rub</p>
-              <a href="#">See More </a>
-            </div>
-          </div>
-          <div class="popular-card">
-            <img src="../img/pizza-recipe-1.jpg" />
-            <div class="popular-card-content">
-              <h4>NEW Hot Honey Wings</h4>
-              <p>Habanero-infused honey sauce & Cajun Style Dru Rub</p>
-              <a href="#">See More </a>
-            </div>
-          </div>
+          <% } %> <%} %>
         </div>
       </section>
     </main>
@@ -194,13 +203,6 @@
       </div>
     </footer>
 
-    <script>
-      function scrollToMainContent() {
-        // Scroll to the element with the id "menu-section"
-        document.getElementById("main-content").scrollIntoView({
-          behavior: "smooth",
-        });
-      }
-    </script>
+    <script src="/scripts/index.js"></script>
   </body>
 </html>
