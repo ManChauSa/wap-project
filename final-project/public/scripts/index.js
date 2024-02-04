@@ -3,7 +3,6 @@ function logout() {
     url: "/logout",
     method: "GET",
     success: function (response) {
-      console.log("Logout successful");
       window.location.href = "/";
     },
     error: function (error) {
@@ -15,7 +14,9 @@ function logout() {
 function order(self) {
   const id = $(self).closest(".menu-card-sl").attr("id")
     ? $(self).closest(".menu-card-sl").attr("id")
-    : $(self).closest(".menu-card-bg").attr("id");
+    : $(self).closest(".menu-card-bg").attr("id")
+    ? $(self).closest(".menu-card-bg").attr("id")
+    : $(self).closest(".tabcontent-item").attr("id");
   $.ajax({
     url: "/order",
     method: "POST",
@@ -75,4 +76,13 @@ function scrollToMainContent() {
   $("#main-content").get(0).scrollIntoView({
     behavior: "smooth",
   });
+}
+
+function openCity(evt, cityName) {
+  $(".tabcontent").hide();
+
+  $(".tablinks").removeClass("active");
+
+  $("#" + cityName).show();
+  $(evt.currentTarget).addClass("active");
 }

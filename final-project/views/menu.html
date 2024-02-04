@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="/css/index.css" />
     <link rel="stylesheet" type="text/css" href="/css/common.css" />
     <link rel="stylesheet" type="text/css" href="/css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="/css/menu.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -25,8 +25,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-
-    <title>Home Page</title>
+    <title>Menu</title>
   </head>
   <body>
     <nav class="nav">
@@ -85,6 +84,7 @@
 
       <button class="btn-checkout" type="button">Checkout</button>
     </div>
+
     <header>
       <div class="title">
         <h1><span>Love </span><span>To Eat</span></h1>
@@ -99,26 +99,54 @@
       </div>
     </header>
 
-    <main id="main-content">
-      <section class="menu">
-        <h1>
-          Menu
-          <span
-            ><a href="/menu"
-              >See More
-              <span class="material-symbols-outlined">
-                arrow_forward_ios
-              </span></a
-            >
-          </span>
-        </h1>
-        <div class="menu-content">
-          <% for(let i = 0; i < 3; i++) {%>
-          <div class="menu-card-sl" id="<%=products[i].id %>">
-            <img src="<%=products[i].img  %>" />
-            <div class="menu-card-content">
-              <h4><%=products[i].title %></h4>
-              <p><%=products[i].description %></p>
+    <div id="main-content">
+      <div class="menu-container">
+        <h1 class="menu-title">The Menu</h1>
+        <div class="tab">
+          <button class="tablinks active" onclick="openCity(event, 'London')">
+            London
+          </button>
+          <button class="tablinks" onclick="openCity(event, 'Paris')">
+            Paris
+          </button>
+          <button class="tablinks" onclick="openCity(event, 'Tokyo')">
+            Tokyo
+          </button>
+        </div>
+
+        <!-- Tab content -->
+        <div id="London" class="tabcontent" style="display: block">
+          <% for(const product of products) {%>
+          <div class="tabcontent-item" id="<%=product.id %>">
+            <div class="item-c1">
+              <h3><%=product.title %></h3>
+              <h3 class="price">$<%=product.price.toFixed(2) %></h3>
+            </div>
+            <div class="item-c2">
+              <p><%=product.description %></p>
+              <button type="button" class="btn-order" onclick="order(this)">
+                Order
+              </button>
+            </div>
+          </div>
+          <%} %>
+
+          <div id="pagination">
+            <button onclick="changePage(-1)">Previous</button>
+            <span id="currentPage">1</span>
+            <button onclick="changePage(1)">Next</button>
+          </div>
+        </div>
+
+        <div id="Paris" class="tabcontent">
+          <% for(const product of products) {%>
+          <div class="tabcontent-item" id="<%=product.id %>">
+            <div class="item-c1">
+              <h3><%=product.title %></h3>
+              <h3 class="price">$<%=product.price.toFixed(2) %></h3>
+            </div>
+            <div class="item-c2">
+              <p><%=product.description %></p>
               <button type="button" class="btn-order" onclick="order(this)">
                 Order
               </button>
@@ -128,13 +156,15 @@
           <%} %>
         </div>
 
-        <div class="menu-content">
-          <% for(let i = 3; i < 5; i++) {%>
-          <div class="menu-card-bg" id="<%=products[i].id %>">
-            <img src="<%=products[i].img  %>" />
-            <div class="menu-card-content">
-              <h4><%=products[i].title %></h4>
-              <p><%=products[i].description %></p>
+        <div id="Tokyo" class="tabcontent">
+          <% for(const product of products) {%>
+          <div class="tabcontent-item" id="<%=product.id %>">
+            <div class="item-c1">
+              <h3><%=product.title %></h3>
+              <h3 class="price">$<%=product.price.toFixed(2) %></h3>
+            </div>
+            <div class="item-c2">
+              <p><%=product.description %></p>
               <button type="button" class="btn-order" onclick="order(this)">
                 Order
               </button>
@@ -143,22 +173,8 @@
 
           <%} %>
         </div>
-        <h1 class="mg-top-4 bd-top">Popular</h1>
-        <div class="popular-content">
-          <% for(let i = 0; i < topThreePopularProducts.length; i++) {%>
-          <%if(topThreePopularProducts[i].isPopular) {%>
-          <div class="popular-card" id="<%=topThreePopularProducts[i].id  %>">
-            <img src="<%=topThreePopularProducts[i].img  %>" />
-            <div class="popular-card-content">
-              <h4><%=topThreePopularProducts[i].title %></h4>
-              <p><%=topThreePopularProducts[i].description %></p>
-              <a href="#">See More </a>
-            </div>
-          </div>
-          <% } %> <%} %>
-        </div>
-      </section>
-    </main>
+      </div>
+    </div>
 
     <footer>
       <div>
@@ -202,7 +218,7 @@
         </div>
       </div>
     </footer>
-
     <script src="/scripts/index.js"></script>
+    <script src="/scripts/pagination.js"></script>
   </body>
 </html>

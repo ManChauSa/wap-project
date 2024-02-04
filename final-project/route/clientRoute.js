@@ -10,6 +10,7 @@ let products = [
     title: "NEW Hot Honey Wings",
     img: "../img/classic-cheese-pizza-recipe-2-64429a0cb408b.jpg",
     description: "Habanero-infused honey sauce & Cajun Style Dru Rub",
+    price: 12.5,
     isPopular: false,
   },
   {
@@ -17,6 +18,7 @@ let products = [
     title: "NEW Hot Honey Wings",
     img: "../img/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2019__09__easy-pepperoni-pizza-lead-3-8f256746d649404baa36a44d271329bc.jpg",
     description: "Habanero-infused honey sauce & Cajun Style Dru Rub",
+    price: 12.5,
     isPopular: true,
   },
   {
@@ -24,6 +26,7 @@ let products = [
     title: "NEW Hot Honey Wings",
     img: "../img/pizza-recipe-1.jpg",
     description: "Habanero-infused honey sauce & Cajun Style Dru Rub",
+    price: 12.5,
     isPopular: true,
   },
   {
@@ -31,6 +34,7 @@ let products = [
     title: "NEW Hot Honey Wings",
     img: "../img/classic-cheese-pizza-recipe-2-64429a0cb408b.jpg",
     description: "Habanero-infused honey sauce & Cajun Style Dru Rub",
+    price: 12.5,
     isPopular: true,
   },
   {
@@ -38,6 +42,7 @@ let products = [
     title: "NEW Hot Honey Wings",
     img: "../img/classic-cheese-pizza-recipe-2-64429a0cb408b.jpg",
     description: "Habanero-infused honey sauce & Cajun Style Dru Rub",
+    price: 17,
     isPopular: true,
   },
 ];
@@ -132,6 +137,24 @@ route.post("/order", (req, res, next) => {
   res.json({ isLogin: true, totalQuantity: totalQuantity, cart: cart });
 });
 
+route.get("/menu", (req, res, next) => {
+  let username = req.cookies.username;
+  let cart = req.cookies.cart;
+  let totalQuantity = 0;
+  if (cart) {
+    totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+  } else {
+    cart = [];
+  }
+  res.render("menu", {
+    username: username,
+    products: products,
+    topThreePopularProducts: topThreePopularProducts,
+    size: totalQuantity,
+    cart: cart,
+  });
+});
+
 route.get("/", (req, res, next) => {
   let username = req.cookies.username;
   let cart = req.cookies.cart;
@@ -141,7 +164,6 @@ route.get("/", (req, res, next) => {
   } else {
     cart = [];
   }
-  console.log(cart);
   res.render("index", {
     username: username,
     products: products,
