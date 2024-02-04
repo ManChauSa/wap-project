@@ -263,6 +263,16 @@ header {
     font-size: 3rem;
   }
 
+  .open {
+    color: white;
+    position: absolute;
+    bottom: 7rem;
+    left: 1rem;
+    padding: 1rem;
+    background-color: black;
+    border-radius: 0.5rem;
+  }
+
   .open p {
     font-size: 1.75rem;
   }

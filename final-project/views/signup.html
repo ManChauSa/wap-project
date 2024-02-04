@@ -7,26 +7,6 @@
     <link rel="stylesheet" type="text/css" href="/css/common.css" />
     <link rel="stylesheet" type="text/css" href="/css/login.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script>
-      function signup() {
-        let username = $("input[name='username']").val();
-        let password = $("input[name='password']").val();
-        $.ajax({
-          url: "/signup",
-          method: "POST",
-          contentType: "application/json",
-          data: JSON.stringify({ username: username, password: password }),
-          success: function (response) {
-            $(".error").hide();
-            $(".success").show();
-          },
-          error: function (error) {
-            $(".error").show();
-            $(".success").hide();
-          },
-        });
-      }
-    </script>
   </head>
   <body>
     <div class="container">
@@ -44,5 +24,7 @@
       <p>or</p>
       <a href="/login">Login</a>
     </div>
+
+    <script src="/scripts/signup.js"></script>
   </body>
 </html>
