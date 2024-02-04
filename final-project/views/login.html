@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/css/login.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+      function login() {
+        let username = $("input[name='username']").val();
+        let password = $("input[name='password']").val();
+        $.ajax({
+          url: "/login",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ username: username, password: password }),
+          success: function (response) {
+            $(".error").hide();
+            window.location.href = "/";
+          },
+          error: function (error) {
+            $(".error").show();
+          },
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <p class="error" style="display: none; color: red">
+        Invalid username/password
+      </p>
+      <div><label>Username:</label> <input type="text" name="username" /></div>
+      <div>
+        <label>Password:</label> <input type="password" name="password" />
+      </div>
+      <button type="button" class="btn-login" onclick="login()">Sign In</button>
+      <p>or</p>
+      <a href="/signup">Create an account</a>
+    </div>
+  </body>
+</html>
