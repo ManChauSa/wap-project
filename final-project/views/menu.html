@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="/css/index.css" />
     <link rel="stylesheet" type="text/css" href="/css/common.css" />
     <link rel="stylesheet" type="text/css" href="/css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="/css/menu.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -25,8 +25,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-
-    <title>Home Page</title>
+    <title>Menu</title>
   </head>
   <body>
     <nav class="nav">
@@ -85,6 +84,7 @@
 
       <button class="btn-checkout" type="button">Checkout</button>
     </div>
+
     <header>
       <div class="title">
         <h1><span>Love </span><span>To Eat</span></h1>
@@ -99,74 +99,107 @@
       </div>
     </header>
 
-    <main id="main-content">
-      <section class="menu">
-        <h1>
-          Menu
-          <span
-            ><a href="/menu"
-              >See More
-              <span class="material-symbols-outlined">
-                arrow_forward_ios
-              </span></a
+    <div id="main-content">
+      <div class="menu-container">
+        <h1 class="menu-title">The Menu</h1>
+        <div class="tab">
+          <button
+            class="tablinks active"
+            onclick="openTab(event, 'Pizza', 'pizza')"
+          >
+            Pizza
+          </button>
+          <button class="tablinks" onclick="openTab(event, 'Salads', 'salad')">
+            Salads
+          </button>
+          <button
+            class="tablinks"
+            onclick="openTab(event, 'Starter', 'starter')"
+          >
+            Starter
+          </button>
+        </div>
+
+        <!-- Tab content -->
+        <div id="Pizza" class="tabcontent" style="display: block">
+          <div class="pizzaContainer">
+            <% for(const product of pizzas) {%>
+            <div class="tabcontent-item" id="<%= product._id.toString() %>">
+              <div class="item-c1">
+                <h3><%=product.title %></h3>
+                <h3 class="price">$<%=product.price.toFixed(2) %></h3>
+              </div>
+              <div class="item-c2">
+                <p><%=product.description %></p>
+                <button
+                  type="button"
+                  class="btn-order"
+                  onclick="order(this, 'pizza')"
+                >
+                  Order
+                </button>
+              </div>
+            </div>
+            <%} %>
+          </div>
+
+          <section class="pagination" id="pizzaPagination">
+            <% if(currentPage !== 1 && previousPage !== 1) {%>
+            <button type="button" onclick="showProductInPage(1, 'pizza')">
+              1
+            </button>
+            <%} %> 
+
+            <% if(hasPreviousPage) {%>
+              <button
+                type="button"
+                onclick="showProductInPage(<%=previousePage %>, 'pizza')"
+              >
+                <%=previousePage %>
+              </button>
+            <%} %>
+
+            <% if (totalProducts > items_per_page) {%>
+              <button class="active" type="button" onclick="showProductInPage(<%=currentPage %>, 'pizza')">
+                <%=currentPage  %>
+              </button>
+            <%}%>
+            
+             <% if(hasNextPage) {%>
+            <button
+              type="button"
+              onclick="showProductInPage(<%=nextPage %>, 'pizza')"
             >
-          </span>
-        </h1>
-        <div class="menu-content">
-          <% for(let i = 0; i < 3; i++) {%>
-          <div class="menu-card-sl" id="<%=products[i]._id.toString() %>">
-            <img src="<%=products[i].img  %>" />
-            <div class="menu-card-content">
-              <h4><%=products[i].title %></h4>
-              <p><%=products[i].description %></p>
-              <button
-                type="button"
-                class="btn-order"
-                onclick="order(this, 'pizza')"
-              >
-                Order
-              </button>
-            </div>
-          </div>
-
-          <%} %>
+              <%=nextPage %>
+            </button>
+            <%}%> 
+            
+            <% if(lastPage !== currentPage && nextPage !== lastPage) {%>
+            <button
+              type="button"
+              onclick="showProductInPage(<%=lastPage %>, 'pizza')"
+            >
+              <%=lastPage %>
+            </button>
+            <%}%>
+            </button>
+          </section>
         </div>
 
-        <div class="menu-content">
-          <% for(let i = 3; i < 5; i++) {%>
-          <div class="menu-card-bg" id="<%=products[i]._id %>">
-            <img src="<%=products[i].img  %>" />
-            <div class="menu-card-content">
-              <h4><%=products[i].title %></h4>
-              <p><%=products[i].description %></p>
-              <button
-                type="button"
-                class="btn-order"
-                onclick="order(this, 'pizza')"
-              >
-                Order
-              </button>
-            </div>
-          </div>
+        <div id="Salads" class="tabcontent">
+          <div class="saladContainer"></div>
+          <section class="pagination" id="saladPagination">
 
-          <%} %>
+          </section>
         </div>
-        <h1 class="mg-top-4 bd-top">Popular</h1>
-        <div class="popular-content">
-          <% for(let i = 0; i < topThreePopularProducts.length; i++) {%>
-          <%if(topThreePopularProducts[i].isPopular) {%>
-          <div class="popular-card" id="<%=topThreePopularProducts[i].id  %>">
-            <img src="<%=topThreePopularProducts[i].img  %>" />
-            <div class="popular-card-content">
-              <h4><%=topThreePopularProducts[i].title %></h4>
-              <p><%=topThreePopularProducts[i].description %></p>
-              <a href="/menu">See More </a>
-            </div>
-          </div>
-          <% } %> <%} %>
+
+        <div id="Starter" class="tabcontent">
+          <div class="starterContainer"></div>
+          <section class="pagination" id="starterPagination">
+          </section>
         </div>
-      </section>
-    </main>
+      </div>
+    </div>
 
     <footer>
       <div>
@@ -210,7 +243,6 @@
         </div>
       </div>
     </footer>
-
     <script src="/scripts/index.js"></script>
   </body>
 </html>

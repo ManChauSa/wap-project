@@ -5,6 +5,13 @@ const cookieParser = require("cookie-parser");
 const admin = require("./admin");
 const path = require("path");
 
+// add mongo
+const { mongoConnect } = require("./util/database");
+
+// add routes
+const clientRoute = require("./route/clientRoute");
+
+// create server
 const app = express();
 
 app.use(function(req, res, next) {
@@ -21,16 +28,22 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "html");
 app.engine("html", ejs.renderFile);
 
+// set up cookie
 app.use(cookieParser());
 
-app.get("/", (req, res, next) => {
-    res.sendFile(path.join(__dirname, "views", "index.html"));
-});
 
 app.use("/admin", admin);
 
+// apply routes
+app.use(clientRoute);
+
+// error page
 app.use((req, res, next) => {
     res.status(404).send("Page Not Found");
 });
 
-app.listen(3000);
+mongoConnect(() => {
+    app.listen(3000);
+});
+
+// app.listen(3000);
