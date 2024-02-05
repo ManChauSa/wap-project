@@ -7,12 +7,16 @@ function signup() {
     contentType: "application/json",
     data: JSON.stringify({ username: username, password: password }),
     success: function (response) {
-      $(".error").hide();
-      $(".success").show();
+      if (response.success) {
+        $(".error").hide();
+        $(".success").show();
+      } else {
+        $(".error").show();
+        $(".success").hide();
+      }
     },
     error: function (error) {
-      $(".error").show();
-      $(".success").hide();
+      console.log("Something went wrong");
     },
   });
 }

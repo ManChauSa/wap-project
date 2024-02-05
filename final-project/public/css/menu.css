@@ -1,0 +1,132 @@
+#main-content {
+  height: auto;
+  background-color: black;
+  padding: 6.4rem 1rem;
+}
+
+.menu-container {
+  max-width: 98rem;
+  margin: auto;
+}
+
+.menu-title {
+  font-size: 6.4rem;
+  margin-bottom: 6.4rem;
+  text-align: center;
+  text-transform: uppercase;
+  color: white;
+}
+
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+.tab button {
+  background-color: black;
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 1.4rem 1.6rem;
+  transition: all 0.3s ease-in;
+  font-size: 3.5rem;
+  width: 33.3%;
+}
+
+.tab button:hover {
+  background-color: #f44336;
+}
+
+.tab button.active {
+  background-color: #f44336;
+}
+
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  background-color: white;
+  animation: fadeEffect 1s;
+}
+
+.tabcontent-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 4rem 1.25rem;
+  border-bottom: 1px solid gray;
+}
+
+.tabcontent-item:last-child {
+  border-bottom: none;
+}
+
+.item-c1,
+.item-c2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h3,
+.item-c2 p,
+.item-c2 button {
+  font-size: 3.6rem;
+}
+
+.price {
+  padding: 0.8rem;
+  background: #616161;
+  border-radius: 0.5rem;
+  color: white;
+}
+
+.btn-order {
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.5rem;
+  outline: none;
+  border: none;
+  background-color: #ab1919;
+  color: white;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+
+.btn-order:hover {
+  transform: scale(1.1);
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.pagination button {
+  color: #00695c;
+  padding: 0.8rem;
+  border: 1px solid #00695c;
+  margin: 0 1rem;
+  font-size: 1.75rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.pagination button:hover,
+.pagination button:active,
+.pagination button.active {
+  background: #00695c;
+  color: white;
+}
+@keyframes fadeEffect {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

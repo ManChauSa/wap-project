@@ -7,11 +7,15 @@ function login() {
     contentType: "application/json",
     data: JSON.stringify({ username: username, password: password }),
     success: function (response) {
-      $(".error").hide();
-      window.location.href = "/";
+      if (response.success) {
+        $(".error").hide();
+        window.location.href = "/";
+      } else {
+        $(".error").show();
+      }
     },
     error: function (error) {
-      $(".error").show();
+      console.log("Something went wrong");
     },
   });
 }
