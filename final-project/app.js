@@ -1,6 +1,8 @@
 const express = require("express");
 const ejs = require("ejs");
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
+
 const path = require("path");
 
 // add mongo
@@ -8,34 +10,39 @@ const { mongoConnect } = require("./util/database");
 
 // add routes
 const clientRoute = require("./route/clientRoute");
-
+const admin = require("./route/admin");
 // create server
 const app = express();
 
-// for upcoming request
-app.use(express.json());
-app.use(express.urlencoded({ urlencoded: false }));
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
+});
 
-// for css file
+// app.use(cors());
+
+app.use(express.json());
+app.use(express.urlencoded({ urlencoded: false, extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// set up view engine
 app.set("view engine", "html");
 app.engine("html", ejs.renderFile);
 
 // set up cookie
 app.use(cookieParser());
 
+app.use("/admin", admin);
+
 // apply routes
 app.use(clientRoute);
 
 // error page
 app.use((req, res, next) => {
-  res.status(404).send("Page Not Found");
+    res.status(404).send("Page Not Found");
 });
 
 mongoConnect(() => {
-  app.listen(3000);
+    app.listen(3000, () => { console.log("server is ready") });
 });
 
 // app.listen(3000);
