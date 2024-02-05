@@ -103,81 +103,100 @@
       <div class="menu-container">
         <h1 class="menu-title">The Menu</h1>
         <div class="tab">
-          <button class="tablinks active" onclick="openTab(event, 'Pizza')">
+          <button
+            class="tablinks active"
+            onclick="openTab(event, 'Pizza', 'pizza')"
+          >
             Pizza
           </button>
-          <button class="tablinks" onclick="openTab(event, 'Salads')">
+          <button class="tablinks" onclick="openTab(event, 'Salads', 'salad')">
             Salads
           </button>
-          <button class="tablinks" onclick="openTab(event, 'Starter')">
+          <button
+            class="tablinks"
+            onclick="openTab(event, 'Starter', 'starter')"
+          >
             Starter
           </button>
         </div>
 
         <!-- Tab content -->
         <div id="Pizza" class="tabcontent" style="display: block">
-          <% for(const product of pizzas) {%>
-          <div class="tabcontent-item" id="<%= product._id.toString() %>">
-            <div class="item-c1">
-              <h3><%=product.title %></h3>
-              <h3 class="price">$<%=product.price.toFixed(2) %></h3>
+          <div class="pizzaContainer">
+            <% for(const product of pizzas) {%>
+            <div class="tabcontent-item" id="<%= product._id.toString() %>">
+              <div class="item-c1">
+                <h3><%=product.title %></h3>
+                <h3 class="price">$<%=product.price.toFixed(2) %></h3>
+              </div>
+              <div class="item-c2">
+                <p><%=product.description %></p>
+                <button
+                  type="button"
+                  class="btn-order"
+                  onclick="order(this, 'pizza')"
+                >
+                  Order
+                </button>
+              </div>
             </div>
-            <div class="item-c2">
-              <p><%=product.description %></p>
+            <%} %>
+          </div>
+
+          <section class="pagination" id="pizzaPagination">
+            <% if(currentPage !== 1 && previousPage !== 1) {%>
+            <button type="button" onclick="showProductInPage(1, 'pizza')">
+              1
+            </button>
+            <%} %> 
+
+            <% if(hasPreviousPage) {%>
               <button
                 type="button"
-                class="btn-order"
-                onclick="order(this, 'pizza')"
+                onclick="showProductInPage(<%=previousePage %>, 'pizza')"
               >
-                Order
+                <%=previousePage %>
               </button>
-            </div>
-          </div>
-          <%} %>
+            <%} %>
+
+            <% if (totalProducts > items_per_page) {%>
+              <button class="active" type="button" onclick="showProductInPage(<%=currentPage %>, 'pizza')">
+                <%=currentPage  %>
+              </button>
+            <%}%>
+            
+             <% if(hasNextPage) {%>
+            <button
+              type="button"
+              onclick="showProductInPage(<%=nextPage %>, 'pizza')"
+            >
+              <%=nextPage %>
+            </button>
+            <%}%> 
+            
+            <% if(lastPage !== currentPage && nextPage !== lastPage) {%>
+            <button
+              type="button"
+              onclick="showProductInPage(<%=lastPage %>, 'pizza')"
+            >
+              <%=lastPage %>
+            </button>
+            <%}%>
+            </button>
+          </section>
         </div>
 
         <div id="Salads" class="tabcontent">
-          <% for(const product of salads) {%>
-          <div class="tabcontent-item" id="<%= product._id.toString() %>">
-            <div class="item-c1">
-              <h3><%=product.title %></h3>
-              <h3 class="price">$<%=product.price.toFixed(2) %></h3>
-            </div>
-            <div class="item-c2">
-              <p><%=product.description %></p>
-              <button
-                type="button"
-                class="btn-order"
-                onclick="order(this, 'salad')"
-              >
-                Order
-              </button>
-            </div>
-          </div>
+          <div class="saladContainer"></div>
+          <section class="pagination" id="saladPagination">
 
-          <%} %>
+          </section>
         </div>
 
         <div id="Starter" class="tabcontent">
-          <% for(const product of starters) {%>
-          <div class="tabcontent-item" id="<%= product._id.toString() %>">
-            <div class="item-c1">
-              <h3><%=product.title %></h3>
-              <h3 class="price">$<%=product.price.toFixed(2) %></h3>
-            </div>
-            <div class="item-c2">
-              <p><%=product.description %></p>
-              <button
-                type="button"
-                class="btn-order"
-                onclick="order(this, 'starter')"
-              >
-                Order
-              </button>
-            </div>
-          </div>
-
-          <%} %>
+          <div class="starterContainer"></div>
+          <section class="pagination" id="starterPagination">
+          </section>
         </div>
       </div>
     </div>

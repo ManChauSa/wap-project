@@ -95,9 +95,11 @@ route.get("/menu", async (req, res, next) => {
   let username = req.cookies.username;
   let cart = req.cookies.cart;
   let totalQuantity = 0;
-  let pizzas = await Product.getAllProductsByType("pizza");
-  let salads = await Product.getAllProductsByType("salad");
-  let starters = await Product.getAllProductsByType("starter");
+  let items_per_page = 5;
+  let pizzas = await Product.getProductsByPage(1, "pizza", items_per_page);
+  let fullPizzas = await Product.getAllProductsByType("pizza");
+  let totalItems = fullPizzas.length;
+
   if (cart) {
     totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
   } else {
@@ -106,11 +108,39 @@ route.get("/menu", async (req, res, next) => {
   res.render("menu", {
     username: username,
     pizzas: pizzas,
-    salads: salads,
-    starters: starters,
     size: totalQuantity,
     cart: cart,
+    items_per_page: items_per_page,
+    totalProducts: totalItems,
+    currentPage: 1,
+    hasNextPage: items_per_page * 1 < totalItems,
+    hasPreviousPage: false,
+    nextPage: 2,
+    previousPage: 0,
+    lastPage: Math.ceil(totalItems / items_per_page),
   });
+});
+
+route.post("/getProductByPage", async (req, res, next) => {
+  const { page, items_per_page, type } = req.body;
+  let products = await Product.getProductsByPage(page, type, items_per_page);
+  let fullProducts = await Product.getAllProductsByType(type);
+  let totalItems = fullProducts.length;
+  if (products) {
+    res.json({
+      success: true,
+      products: products,
+      totalProducts: totalItems,
+      currentPage: page,
+      hasNextPage: items_per_page * page < totalItems,
+      hasPreviousPage: page > 1,
+      nextPage: page + 1,
+      previousPage: page - 1,
+      lastPage: Math.ceil(totalItems / items_per_page),
+    });
+  } else {
+    res.json({ success: false });
+  }
 });
 
 route.get("/", async (req, res, next) => {

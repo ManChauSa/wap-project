@@ -78,11 +78,163 @@ function scrollToMainContent() {
   });
 }
 
-function openTab(evt, tabName) {
+function openTab(evt, tabName, type) {
   $(".tabcontent").hide();
 
   $(".tablinks").removeClass("active");
-
+  showProductInPage(1, type);
   $("#" + tabName).show();
   $(evt.currentTarget).addClass("active");
+}
+
+function showProductInPage(page, type) {
+  const items_per_page = 5;
+  $.ajax({
+    url: "/getProductByPage",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({
+      page: page,
+      items_per_page: items_per_page,
+      type: type,
+    }),
+    success: function (response) {
+      if (response.success) {
+        const products = response.products;
+        const totalProducts = response.totalProducts;
+        const currentPage = response.currentPage;
+        const hasNextPage = response.hasNextPage;
+        const hasPreviousPage = response.hasPreviousPage;
+        const nextPage = response.nextPage;
+        const previousPage = response.previousPage;
+        const lastPage = response.lastPage;
+        console.log(hasNextPage);
+        console.log(lastPage);
+        let html = "";
+        for (const product of products) {
+          html +=
+            `
+            <div class="tabcontent-item" id="` +
+            product._id.toString() +
+            `">
+            <div class="item-c1">
+              <h3>` +
+            product.title +
+            `</h3>
+              <h3 class="price">$` +
+            product.price.toFixed(2) +
+            `</h3>
+            </div>
+            <div class="item-c2">
+              <p>` +
+            product.description +
+            `</p>
+              <button
+                type="button"
+                class="btn-order"
+                onclick="order(this, '` +
+            type +
+            `')"
+              >
+                Order
+              </button>
+            </div>
+          </div>
+            
+            `;
+        }
+
+        let pagination = "";
+
+        if (currentPage !== 1 && previousPage !== 1) {
+          pagination +=
+            `<button type="button" onclick="showProductInPage(1, '` +
+            type +
+            `')">
+              1
+            </button>`;
+        }
+        if (hasPreviousPage) {
+          pagination +=
+            `
+          <button
+            type="button"
+            onclick="showProductInPage(` +
+            previousPage +
+            `, '` +
+            type +
+            `')"
+          >
+          ` +
+            previousPage +
+            `
+          </button>
+          `;
+        }
+        if (totalProducts > items_per_page) {
+          pagination +=
+            `
+        <button type="button" class="active" onclick="showProductInPage(` +
+            currentPage +
+            `, ` +
+            type +
+            `)">
+        ` +
+            currentPage +
+            `
+        </button>
+        
+        `;
+        }
+
+        if (hasNextPage) {
+          pagination +=
+            `  
+          <button
+              type="button"
+              onclick="showProductInPage(` +
+            nextPage +
+            `, '` +
+            type +
+            `')"
+            >
+            ` +
+            nextPage +
+            `
+            </button>
+          `;
+        }
+        if (lastPage !== currentPage && nextPage !== lastPage) {
+          pagination +=
+            `
+          <button
+              type="button"
+              onclick="showProductInPage(` +
+            lastPage +
+            `, '` +
+            type +
+            `')"
+            >
+            ` +
+            lastPage +
+            `
+            </button>
+          `;
+        }
+        if (type === "pizza") {
+          $(".pizzaContainer").html(html);
+          $("#pizzaPagination").html(pagination);
+        } else if (type === "salad") {
+          $(".saladContainer").html(html);
+          $("#saladPagination").html(pagination);
+        } else {
+          $(".starterContainer").html(html);
+          $("#starterPagination").html(pagination);
+        }
+      }
+    },
+    error: function (error) {
+      console.log("Something went wrong");
+    },
+  });
 }
