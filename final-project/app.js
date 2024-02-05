@@ -5,6 +5,7 @@ const path = require("path");
 
 // add routes
 const clientRoute = require("./route/clientRoute");
+const cart = require("./route/cart");
 
 // create server
 const app = express();
@@ -25,6 +26,7 @@ app.use(cookieParser());
 
 // apply routes
 app.use(clientRoute);
+app.use(cart);
 
 // error page
 app.use((req, res, next) => {

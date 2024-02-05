@@ -6,9 +6,10 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="/css/cart.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <script src="js/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/scripts/chart.js"></script>
 </head>
 <body>
     <div class="content">
@@ -18,25 +19,24 @@
             <div class="order__content">
                 <div class="title">
                     <h1>Order Cart</h1>
-                    <h3>3 items</h3>
+                    <h3 class="total_quan"><%= totalQuantity %> item(s)</h3>
                 </div>
                 <ul class="order_list">
                     <% for(let item of listOrders){ %> 
-                    <li class="order_item">
+                    <li class=" order_item order_item_<%= item.id %>">
                         <img src="<%= item.image %>" alt="">
                         <div class="item_des">
                             <h3 class="title_product"><%= item.title %></h3>
                             <p class="des_produc"><%= item.description %></p>
                         </div>
-                        <div class="quantity">
-                            <% var id = item.id %>
-                            <button type="button" data-id="<%= item.id %>" onclick="updateOrder(this)" class="btn_minus"></button>
-                            <input type="text" min="0" name="input_quan_<%= item.id %>" value="<%= item.total %>">
-                            <button type="button" data-id="<%= item.id %>" onclick="updateOrder(this)"class="btn_plus"></button>
+                        <div class="quantity" data-id="<%= item.id %>">
+                            <button type="button" onclick="updateOrder(this)" class="btn_minus"></button>
+                            <input type="text" min="0" onchange="changeQuantity(this)" name="input_quan_<%= item.id %>" value="<%= item.quantity %>">
+                            <button type="button"  onclick="updateOrder(this)"class="btn_plus"></button>
                         </div>
-                        <div class="price"><p><%= item.price %></p></div>
-                        <div class="delete"> 
-                            <button data-id="<%= item.id %>" onclick="updateOrder(this)" class="btn_delete"></button>
+                        <div class="price"><p>$<%= item.price %></p></div>
+                        <div class="delete" data-id="<%= item.id %>" > 
+                            <button onclick="updateOrder(this)" class="btn_delete"></button>
                         </div>
                     </li>
                         
@@ -47,41 +47,81 @@
         </div>
         <div class="content_right">
             <h1>Summary</h1>
+            <form action="/sammary" method="post">
             <div class="cards">
                 <div class="cart">
-                    <input type="radio" name="car_type">
-                    <input type="radio" name="car_type">
-                    <input type="radio" name="car_type">
-                    <input type="radio" name="car_type">
+                  
+                    <label class="radio-image">
+                        <input type="radio" name="card" value="visa" required>
+                        <img src="../img/visa.png" alt="visa">
+                    </label>
+                    
+                    <label class="radio-image">
+                        <input type="radio" name="card" value="master" required>
+                        <img src="../img/logo.png" alt="master">
+                    </label>
+                    
+                    <label class="radio-image">
+                        <input type="radio" name="card" value="paypal"required>
+                        <img src="../img/paypal.png" alt="paypal">
+                    </label>
+                    
+                    <label class="radio-image">
+                        <input type="radio" name="card" value="discover"required>
+                        <img src="../img/discover.png" alt="discover">
+                    </label>
                 </div>
                 <div class="card_infor">
                     <label for="name"> Cardholders's Name</label>
-                    <input type="text" name="name" id="">
+                    <input type="text" name="name" id="" required>
                     <label for="card_num"> Card Number</label>
-                    <input type="number" name="card_num" id="">
+                    <input type="number" name="card_num" id="" required>
                     <label for="expiation">Expiration</label>
-                    <input type="date" name="expiation" id="">
+                    <input type="text"  placeholder="MM/YY" name="expiation" id="" required>
                     <label for="cvv">Cvv</label>
-                    <input type="number" name="cvv" id="">
+                    <input type="number" name="cvv" id="" required>
                 </div>
                 <div class="total">
                     <div>
-                        <p>Subtotal</p>
-                        <p>$5555</p>
+                        <input type="text" placeholder="Coupon Code" name="coupon" id="">
+                        <div class="btn_coupon" onclick="applyCoupon()"><span>Apply</span></div>
+                    </div>
+                    
+                    <div class="coupon_status" style="display: none;">
+                        <p class="coupon_error"></p>
+                        <p class="money coupon_reduce"></p>
+                        <input type="hidden" name="coupon_reduce" id="coupon_reduce" value="">
                     </div>
                     <div>
-                        <p>Delivery</p>
-                        <p>$15</p>
+                        <p>Subtotal</p>
+                        <p class="sub_total money">$<%= subTotal %></p>
+                    </div>
+                    <div>
+                        <select style="width: 178px; height: 30px;" onchange="onchangeDelivery()" name="delivery" id="">
+                            <option value="0">Delivery</option>
+                            <option value="1">Pick up</option>
+                        </select>
+                        <p class="money delivery">$15</p>
+                    </div>
+                    <div>
+                        <p>Tax</p>
+                        <p class="money tax">$<%= subTotal*0.1  %></p>
                     </div>
                     <div>
                         <p>Total(Incl.taxes)</p>
-                        <p>$5570</p>
+                        <p class="total_incl money">$<%=subTotal+(subTotal*0.1 ) +15 %></p>
                     </div>
-                    <div class="checkout"><button>CHECKOUT</button></div>
+                    
+                    <input type="hidden" name="total" id="total" value="<%=subTotal+(subTotal*0.1 ) +15 %>">
+                    <input type="hidden" name="sub_total_val" id="sub_total_val" value="<%= subTotal %>">
+                    <div class="checkout"><button >CHECKOUT</button></div>
                 </div>
-            </div>
+            </div> 
+            
+        </form>
         </div>
     </div>
-</div>
+    </div>
+    
 </body>
 </html>

@@ -1,18 +1,40 @@
+body{
+    background: url(../img/Pizza-3007395.jpg);
+    background-position: center;
+    background-size: contain;
+    /* backdrop-filter: blur(5px); */
+    -webkit-backdrop-filter: blur(5px);
+    /* backdrop-filter: blur(5px); */
+    /* color: #3c3c39; */
+    /* display: flex; */
+    /* justify-content: center; */
+    /* height: 100%; */
+    font-family: 'Monsterrat', sans-serif;
+    /* position: relative; */
+    /* padding: 0px; */
+    margin: 0;
+}
 .content{
     margin-right: auto;
     margin-left: auto;
     /* width: 100%; */
-    width: 80%;
+    width: 85%;
 }
 .inner_content {
     width: 100%;
     display: flex;
+    margin: 20px 0;
+    justify-content: space-between;  
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
 }
 .content_left {
     width: 60%;
 }
 .content_right {
-    width: 40%;
+    width: 30%;    
+    height: 625px;
 }
 .back {
     height: 50px;
@@ -38,6 +60,9 @@
     width: 100px;
     height: 100px;
     padding: 10px 0;
+}
+ul.order_list {
+    padding-left: 20px;
 }
 .quantity {
     display: flex;
@@ -118,4 +143,86 @@ h3.title_product {
 }
 .checkout button{
     width: 170px;
+}
+.price, .delete {
+    width: 50px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* payment */
+input[type="radio"] {
+    display: none;
+}
+
+.radio-image {
+    margin-right: 20px; 
+    cursor: pointer;
+}
+
+.radio-image img {
+    width: 40px;
+    height:auto;
+    border: 5px solid #FFF;
+    background: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #ccc;
+}
+
+[type=radio]:checked + img {
+    outline: 2px solid #ccc;
+    border: 5px solid #FFF;
+    background: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #ccc;
+    box-shadow: 0px 0px 5px 5px rgb(167, 163, 163);
+
+  /* Visible in Windows high-contrast themes */
+  outline-color: transparent;
+  }
+
+  .cart {
+    display: flex;
+    justify-content: center;
+}
+input[name="coupon"]{
+    height: 24px;
+    width: 170px;
+    margin-top: 15px;
+}
+.btn_coupon{
+    border: 1px solid gray;
+    height: 28px;
+    margin-top: 12px;
+    border-radius: 5px;
+    text-align: center;
+    align-items: center;
+    padding: 5px 10px;
+    cursor: pointer;
+    
+    border: 1px solid #FFF;
+    background: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #ccc;
+}
+.btn_coupon:hover{
+    background: #d7d5d5;
+}
+.money {
+    font-weight: bold;
+}
+/* .total .coupon_status{
+    display: none !important;
+} */
+.coupon_error {
+    color: red;
+}
+.total p {
+    margin: 10px 0;
 }

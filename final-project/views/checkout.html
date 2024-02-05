@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/css/checkout.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>  
+    <script src="/scripts/checkout.js"></script>
+</head>
+<body>
+    <div class="content">
+        <div class="inner_content">
+            <div class="bill_infor">
+                <!-- <form > -->
+                    <div class="group_name">
+                        
+                    <div class="mb-3 mt-3">
+                        <label for="first_name" class="form-label">First name:</label>
+                        <input type="text" class="form-control" id="first_name" placeholder="Enter first name" name="first_name" required>
+                      </div>
+                      <div class="mb-3 mt-3">
+                        <label for="last_name" class="last_name form-label">Last name:</label>
+                        <input type="text" class="form-control" id="last_name" placeholder="Enter last name" name="last_name" required>
+                      </div>
+                    </div>
+                    <div class="address">
+                      <label for="address_number" class="form-label">Street address :</label>
+                      <div class="group_address">
+                        <input type="text" class="form-control" id="address_number" placeholder="Enter house number amd street name " name="address_number" required>
+                        <input type="text" class="form-control" id="apaertment_number" placeholder="Enter Apartment,...(optional) " name="apaertment_number">
+
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="city" class="form-label">Town city :</label>
+                      <input type="text" class="form-control" id="city" placeholder="Enter city " name="city" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="state" class="form-label">State :</label>
+                      <input type="text" class="form-control" id="state" placeholder="Enter state " name="state" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="zip_code" class="form-label">ZIP code :</label>
+                      <input type="text" class="form-control" id="zip_code" placeholder="Enter ZIP code " name="zip_code" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="phone" class="form-label">Phone :</label>
+                      <input type="text" class="form-control" id="phone" placeholder="Enter phone" name="phone" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="note" class="form-label">Phone :</label>
+                      <input type="text" class="form-control" id="note" placeholder="Enter special notes for delivery" name="note" required>
+                    </div>
+                    <div class="btn_submit">
+                      <button type="submit" class="btn btn-primary" onclick="openDelivery()">Delivery</button>
+                    </div>
+                  <!-- </form> -->
+            </div>
+            <div class="order_infor">
+                <h3>Your Order</h3>
+                <div class="list_order">
+                    <% for(let item of data.orders){ %>
+                        <div>
+                            <p class="title"> <%= item.title %> x <%= item.quantity  %></p>
+                            <p class="price"><%= item.price %></p>
+                        </div>                    
+                    <% } %>
+                    <hr>
+                    <div>
+                        <p class="title"> Subtotal</p>
+                        <p class="price sub_total"><%= data.sub %></p>
+                    </div> 
+                    <div>
+                        <p class="title"> Tax</p>
+                        <p class="price tax"><%= (data.sub *0.1)%> </p>
+                    </div> 
+                    <div>
+                        <p class="title"> Coupon</p>
+                        <p class="price coupon"><%= data.sale %> </p>
+                    </div> 
+                    <div>
+                        <p class="title"> Delivery</p>
+                        <p class="price coupon"><%= data.delivery %> </p>
+                    </div> 
+                    <div>
+                        <p class="title"> Total</p>
+                        <p class="price total"><%= data.total %> </p>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="delivery_popup">
+      <div class="delirevy_title">
+        <p> Your delivery success</p>
+      </div>
+      <div class="btn_ok">
+        <a href="/"> <button class="" type="button">OK</button></a>
+      </div>
+
+    </div>
+</body>
+</html>
