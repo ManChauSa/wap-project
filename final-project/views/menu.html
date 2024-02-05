@@ -103,51 +103,53 @@
       <div class="menu-container">
         <h1 class="menu-title">The Menu</h1>
         <div class="tab">
-          <button class="tablinks active" onclick="openCity(event, 'London')">
-            London
+          <button class="tablinks active" onclick="openTab(event, 'Pizza')">
+            Pizza
           </button>
-          <button class="tablinks" onclick="openCity(event, 'Paris')">
-            Paris
+          <button class="tablinks" onclick="openTab(event, 'Salads')">
+            Salads
           </button>
-          <button class="tablinks" onclick="openCity(event, 'Tokyo')">
-            Tokyo
+          <button class="tablinks" onclick="openTab(event, 'Starter')">
+            Starter
           </button>
         </div>
 
         <!-- Tab content -->
-        <div id="London" class="tabcontent" style="display: block">
-          <% for(const product of products) {%>
-          <div class="tabcontent-item" id="<%=product.id %>">
+        <div id="Pizza" class="tabcontent" style="display: block">
+          <% for(const product of pizzas) {%>
+          <div class="tabcontent-item" id="<%= product._id.toString() %>">
             <div class="item-c1">
               <h3><%=product.title %></h3>
               <h3 class="price">$<%=product.price.toFixed(2) %></h3>
             </div>
             <div class="item-c2">
               <p><%=product.description %></p>
-              <button type="button" class="btn-order" onclick="order(this)">
+              <button
+                type="button"
+                class="btn-order"
+                onclick="order(this, 'pizza')"
+              >
                 Order
               </button>
             </div>
           </div>
           <%} %>
-
-          <div id="pagination">
-            <button onclick="changePage(-1)">Previous</button>
-            <span id="currentPage">1</span>
-            <button onclick="changePage(1)">Next</button>
-          </div>
         </div>
 
-        <div id="Paris" class="tabcontent">
-          <% for(const product of products) {%>
-          <div class="tabcontent-item" id="<%=product.id %>">
+        <div id="Salads" class="tabcontent">
+          <% for(const product of salads) {%>
+          <div class="tabcontent-item" id="<%= product._id.toString() %>">
             <div class="item-c1">
               <h3><%=product.title %></h3>
               <h3 class="price">$<%=product.price.toFixed(2) %></h3>
             </div>
             <div class="item-c2">
               <p><%=product.description %></p>
-              <button type="button" class="btn-order" onclick="order(this)">
+              <button
+                type="button"
+                class="btn-order"
+                onclick="order(this, 'salad')"
+              >
                 Order
               </button>
             </div>
@@ -156,16 +158,20 @@
           <%} %>
         </div>
 
-        <div id="Tokyo" class="tabcontent">
-          <% for(const product of products) {%>
-          <div class="tabcontent-item" id="<%=product.id %>">
+        <div id="Starter" class="tabcontent">
+          <% for(const product of starters) {%>
+          <div class="tabcontent-item" id="<%= product._id.toString() %>">
             <div class="item-c1">
               <h3><%=product.title %></h3>
               <h3 class="price">$<%=product.price.toFixed(2) %></h3>
             </div>
             <div class="item-c2">
               <p><%=product.description %></p>
-              <button type="button" class="btn-order" onclick="order(this)">
+              <button
+                type="button"
+                class="btn-order"
+                onclick="order(this, 'starter')"
+              >
                 Order
               </button>
             </div>
@@ -219,6 +225,5 @@
       </div>
     </footer>
     <script src="/scripts/index.js"></script>
-    <script src="/scripts/pagination.js"></script>
   </body>
 </html>

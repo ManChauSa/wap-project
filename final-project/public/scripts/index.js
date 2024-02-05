@@ -11,7 +11,7 @@ function logout() {
   });
 }
 
-function order(self) {
+function order(self, type) {
   const id = $(self).closest(".menu-card-sl").attr("id")
     ? $(self).closest(".menu-card-sl").attr("id")
     : $(self).closest(".menu-card-bg").attr("id")
@@ -21,7 +21,7 @@ function order(self) {
     url: "/order",
     method: "POST",
     contentType: "application/json",
-    data: JSON.stringify({ id: id }),
+    data: JSON.stringify({ id: id, type: type }),
     success: function (response) {
       if (response.isLogin) {
         $(".total-number").html(response.totalQuantity);
@@ -78,11 +78,11 @@ function scrollToMainContent() {
   });
 }
 
-function openCity(evt, cityName) {
+function openTab(evt, tabName) {
   $(".tabcontent").hide();
 
   $(".tablinks").removeClass("active");
 
-  $("#" + cityName).show();
+  $("#" + tabName).show();
   $(evt.currentTarget).addClass("active");
 }

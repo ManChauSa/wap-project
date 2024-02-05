@@ -3,6 +3,9 @@ const ejs = require("ejs");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
+// add mongo
+const { mongoConnect } = require("./util/database");
+
 // add routes
 const clientRoute = require("./route/clientRoute");
 
@@ -31,4 +34,8 @@ app.use((req, res, next) => {
   res.status(404).send("Page Not Found");
 });
 
-app.listen(3000);
+mongoConnect(() => {
+  app.listen(3000);
+});
+
+// app.listen(3000);

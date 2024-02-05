@@ -114,12 +114,16 @@
         </h1>
         <div class="menu-content">
           <% for(let i = 0; i < 3; i++) {%>
-          <div class="menu-card-sl" id="<%=products[i].id %>">
+          <div class="menu-card-sl" id="<%=products[i]._id.toString() %>">
             <img src="<%=products[i].img  %>" />
             <div class="menu-card-content">
               <h4><%=products[i].title %></h4>
               <p><%=products[i].description %></p>
-              <button type="button" class="btn-order" onclick="order(this)">
+              <button
+                type="button"
+                class="btn-order"
+                onclick="order(this, 'pizza')"
+              >
                 Order
               </button>
             </div>
@@ -130,12 +134,16 @@
 
         <div class="menu-content">
           <% for(let i = 3; i < 5; i++) {%>
-          <div class="menu-card-bg" id="<%=products[i].id %>">
+          <div class="menu-card-bg" id="<%=products[i]._id %>">
             <img src="<%=products[i].img  %>" />
             <div class="menu-card-content">
               <h4><%=products[i].title %></h4>
               <p><%=products[i].description %></p>
-              <button type="button" class="btn-order" onclick="order(this)">
+              <button
+                type="button"
+                class="btn-order"
+                onclick="order(this, 'pizza')"
+              >
                 Order
               </button>
             </div>
@@ -152,7 +160,7 @@
             <div class="popular-card-content">
               <h4><%=topThreePopularProducts[i].title %></h4>
               <p><%=topThreePopularProducts[i].description %></p>
-              <a href="#">See More </a>
+              <a href="/menu">See More </a>
             </div>
           </div>
           <% } %> <%} %>

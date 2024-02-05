@@ -1,55 +1,8 @@
 const express = require("express");
-
+const User = require("../models/user");
+const Product = require("../models/product");
 const route = express.Router();
 
-let users = [{ username: "linh", password: "linh" }];
-
-let products = [
-  {
-    id: "p-1",
-    title: "NEW Hot Honey Wings",
-    img: "../img/classic-cheese-pizza-recipe-2-64429a0cb408b.jpg",
-    description: "Habanero-infused honey sauce & Cajun Style Dru Rub",
-    price: 12.5,
-    isPopular: false,
-  },
-  {
-    id: "p-2",
-    title: "NEW Hot Honey Wings",
-    img: "../img/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2019__09__easy-pepperoni-pizza-lead-3-8f256746d649404baa36a44d271329bc.jpg",
-    description: "Habanero-infused honey sauce & Cajun Style Dru Rub",
-    price: 12.5,
-    isPopular: true,
-  },
-  {
-    id: "p-3",
-    title: "NEW Hot Honey Wings",
-    img: "../img/pizza-recipe-1.jpg",
-    description: "Habanero-infused honey sauce & Cajun Style Dru Rub",
-    price: 12.5,
-    isPopular: true,
-  },
-  {
-    id: "p-4",
-    title: "NEW Hot Honey Wings",
-    img: "../img/classic-cheese-pizza-recipe-2-64429a0cb408b.jpg",
-    description: "Habanero-infused honey sauce & Cajun Style Dru Rub",
-    price: 12.5,
-    isPopular: true,
-  },
-  {
-    id: "p-5",
-    title: "NEW Hot Honey Wings",
-    img: "../img/classic-cheese-pizza-recipe-2-64429a0cb408b.jpg",
-    description: "Habanero-infused honey sauce & Cajun Style Dru Rub",
-    price: 17,
-    isPopular: true,
-  },
-];
-
-let popularProducts = products.filter((product) => product.isPopular);
-
-let topThreePopularProducts = popularProducts.slice(0, 3);
 route.get("/login", (req, res, next) => {
   let username = req.cookies.username;
   if (username) {
@@ -66,21 +19,20 @@ route.get("/signup", (req, res, next) => {
   res.render("signup");
 });
 
-route.post("/signup", (req, res, next) => {
+route.post("/signup", async (req, res, next) => {
   let username = req.body.username;
   let password = req.body.password;
   let validUser = true;
-  for (const user of users) {
-    if (user.username === username) {
-      validUser = false;
-      break;
-    }
+  const existingUser = await User.findByUsername(username);
+  if (existingUser) {
+    validUser = false;
   }
   if (validUser) {
-    users.push({ username: username, password: password });
+    const newUser = new User(username, password);
+    await newUser.save();
     res.json({ success: true });
   } else {
-    throw new Error("User is already existed");
+    res.json({ success: false });
   }
 });
 
@@ -90,41 +42,43 @@ route.get("/logout", (req, res, next) => {
   res.redirect("/");
 });
 
-route.post("/login", (req, res, next) => {
-  let username = req.body.username;
-  let password = req.body.password;
-  let validUser = false;
-  for (const user of users) {
-    if (user.username === username && user.password === password) {
-      validUser = true;
-      break;
+route.post("/login", async (req, res, next) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  try {
+    const user = await User.login(username, password);
+    if (user) {
+      res.cookie("username", username);
+      res.json({ success: true });
+    } else {
+      res.json({ success: false });
     }
-  }
-  if (validUser) {
-    res.cookie("username", username);
-    res.json({ success: true });
-  } else {
-    throw new Error("Invalid username/password");
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-route.post("/order", (req, res, next) => {
+route.post("/order", async (req, res, next) => {
   let username = req.cookies.username;
   let cart = req.cookies.cart;
   if (!username) {
     res.json({ isLogin: false });
   } else {
-    const { id } = req.body;
-    let product = products.find((product) => product.id === id);
+    const { id, type } = req.body;
+
+    let product = await Product.findProductById(type, id);
     let newItem = {
-      id: product.id,
+      id: product._id,
       title: product.title,
       quantity: 1,
     };
     if (!cart) {
       cart = [newItem];
     } else {
-      const existingItem = cart.find((item) => item.id === newItem.id);
+      const existingItem = cart.find(
+        (item) => item.id.toString() === newItem.id.toString()
+      );
       if (existingItem) {
         existingItem.quantity += newItem.quantity;
       } else {
@@ -137,10 +91,13 @@ route.post("/order", (req, res, next) => {
   res.json({ isLogin: true, totalQuantity: totalQuantity, cart: cart });
 });
 
-route.get("/menu", (req, res, next) => {
+route.get("/menu", async (req, res, next) => {
   let username = req.cookies.username;
   let cart = req.cookies.cart;
   let totalQuantity = 0;
+  let pizzas = await Product.getAllProductsByType("pizza");
+  let salads = await Product.getAllProductsByType("salad");
+  let starters = await Product.getAllProductsByType("starter");
   if (cart) {
     totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
   } else {
@@ -148,16 +105,20 @@ route.get("/menu", (req, res, next) => {
   }
   res.render("menu", {
     username: username,
-    products: products,
-    topThreePopularProducts: topThreePopularProducts,
+    pizzas: pizzas,
+    salads: salads,
+    starters: starters,
     size: totalQuantity,
     cart: cart,
   });
 });
 
-route.get("/", (req, res, next) => {
+route.get("/", async (req, res, next) => {
   let username = req.cookies.username;
   let cart = req.cookies.cart;
+  let pizzas = await Product.getAllProductsByType("pizza");
+  let popularPizzas = pizzas.filter((product) => product.isPopular);
+  let topThreePopularPizzas = popularPizzas.slice(0, 3);
   let totalQuantity = 0;
   if (cart) {
     totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
@@ -166,8 +127,8 @@ route.get("/", (req, res, next) => {
   }
   res.render("index", {
     username: username,
-    products: products,
-    topThreePopularProducts: topThreePopularProducts,
+    products: pizzas,
+    topThreePopularProducts: topThreePopularPizzas,
     size: totalQuantity,
     cart: cart,
   });
