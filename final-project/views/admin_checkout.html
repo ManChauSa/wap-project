@@ -1,0 +1,19 @@
+<h3>Total Sale Summation</h3>
+<div name="admin_checkout">
+    <table>
+        <tr>
+            <th>Product ID</th>
+            <th>Total Quantity</th>
+        </tr>
+        <% for(let productId in report){ %>
+            <tr>
+                <td>
+                    <%= productId %>
+                </td>
+                <td>
+                    <%= report[productId] %>
+                </td>
+            </tr>
+            <%} %>
+    </table>
+</div>
