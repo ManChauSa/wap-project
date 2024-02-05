@@ -2,7 +2,7 @@ const express = require("express");
 const ejs = require("ejs");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const admin = require("./admin");
+
 const path = require("path");
 
 // add mongo
@@ -10,7 +10,7 @@ const { mongoConnect } = require("./util/database");
 
 // add routes
 const clientRoute = require("./route/clientRoute");
-
+const admin = require("./route/admin");
 // create server
 const app = express();
 
@@ -31,7 +31,6 @@ app.engine("html", ejs.renderFile);
 // set up cookie
 app.use(cookieParser());
 
-
 app.use("/admin", admin);
 
 // apply routes
@@ -43,7 +42,7 @@ app.use((req, res, next) => {
 });
 
 mongoConnect(() => {
-    app.listen(3000);
+    app.listen(3000, () => { console.log("server is ready") });
 });
 
 // app.listen(3000);

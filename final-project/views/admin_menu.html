@@ -1,11 +1,15 @@
-<div name="admin_menu_table">
+<div name="admin_menu_table" style="overflow-y: scroll;height: 100vh;">
     <% for(let opt of food){ %>
-        <div class="menu_present" id="food_<%= opt.id %>">
+        <div class="menu_present" id="food_<%= opt._id %>">
             <div name="img">
-                <img src="<%= opt.image %>" alt="pizza_img" width="200px" height="200px">
-                <input type='file' id="food_<%= opt.id %>_img" accept="image/*" onchange="displayImage(this)">
+                <img src="<%= opt.img %>" alt="pizza_img" width="200px" height="200px">
+                <input type='file' id="food_<%= opt._id %>_img" accept="image/*" onchange="displayImage(this)">
             </div>
             <div name="attributes">
+                <div>
+                    Food Type:
+                    <%= opt.type %>
+                </div>
                 <div ondblclick="toInput(this)" name="title">
                     <%= opt.title %>
                 </div>
@@ -13,7 +17,9 @@
                     <%= opt.description %>
                 </div>
                 <div ondblclick="toInput(this)" name="price">
-                    <%= opt.price %> $</div>
+                    <%= opt.price %> $
+                </div>
+                <br>
                 <button onclick="saveMenu(this)">Save</button>
             </div>
         </div>

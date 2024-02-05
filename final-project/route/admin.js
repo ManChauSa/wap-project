@@ -3,6 +3,7 @@ const ejs = require("ejs");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const cookieParser = require("cookie-parser");
+const Product = require("../models/product");
 const path = require("path");
 
 const options = {
@@ -14,7 +15,7 @@ const options = {
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         // Specify the directory where you want to save the files
-        cb(null, path.join(__dirname, "public/img"));
+        cb(null, path.join(__dirname, "../public/img"));
     },
     filename: function(req, file, cb) {
         // Specify the name format for saved files (in this case, use the original file name)
@@ -26,42 +27,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const router = express.Router(options);
-
-const fake_menu = {
-    food: [{
-            id: 1,
-            image: "https://media.tenor.com/odivpWLQNGkAAAAM/catbailando.gif",
-            title: "1",
-            description: "random text 1",
-            price: 10,
-            isPopular: true,
-        },
-        {
-            id: 2,
-            image: "https://media.tenor.com/1KJMqEXCRH8AAAAM/meow-baby.gif",
-            title: "2",
-            description: "random text 2",
-            price: 30,
-            isPopular: false,
-        },
-        {
-            id: 3,
-            image: "https://media.tenor.com/SUv_UTpCX10AAAAM/womp-womp.gif",
-            title: "3",
-            description: "random text 3",
-            price: 13,
-            isPopular: false,
-        },
-        {
-            id: 4,
-            image: "https://media.tenor.com/FcYkbZvdsyAAAAAM/cat-dancing.gif",
-            title: "4",
-            description: "random text 4",
-            price: 15,
-            isPopular: false,
-        },
-    ],
-};
 
 const fake_employees = {
     employees: [{
@@ -116,19 +81,42 @@ const fake_checkout = {
     ]
 }
 
+const foodTypes = ["pizza", "salad", "starter"]
 router.get("/index", (req, res, next) => {
     let context = {};
     res.render("admin", context);
 });
 
-router.get("/menu", (req, res, next) => {
-    let context = fake_menu;
+router.get("/menu", async(req, res, next) => {
+    let context = { food: [] }
+    for (let type of foodTypes) {
+        let items = await Product.getAllProductsByType(type);
+        for (let item of items) {
+            item.type = type
+        }
+        context.food.splice(0, 0, ...items)
+    }
+    console.log(context)
     res.render("admin_menu", context);
 });
 
 router.post("/update_menu", (req, res, next) => {
-    // TODO
-    console.log(req.body);
+    let data = req.body;
+    data.price = parseFloat(data.price)
+    let type = data.type
+    delete data.type
+    let productId = data.id;
+    if (productId) {
+        delete data.id;
+        console.log("Update data to product")
+        console.log(productId)
+        console.log(data)
+        Product.updateProductById(type, productId, data);
+    } else {
+        console.log("Add new data to product")
+        console.log(data)
+        Product.addProduct(type, data);
+    }
 });
 
 router.post("/new_menu_image", upload.single("file"), (req, res) => {
@@ -145,7 +133,6 @@ router.get("/checkout", (req, res, next) => {
     let data = fake_checkout;
     let report = {}
     for (let frame of data.checkouts) {
-        console.log(frame)
         if (report[frame['product_id']]) {
             report[frame['product_id']] += frame['quantity']
         } else {

@@ -24,7 +24,7 @@ function unHigh(obj) {
 }
 
 function toInput(obj) {
-    $(obj).before("<input style='height: 40px;' type='text' name='" + $(obj).attr("name") + "' onmouseleave='toData(this)' value='" + $(obj).html().trim() + "'>")
+    $(obj).before("<input style='height: 40px;width: 500px;' type='text' name='" + $(obj).attr("name") + "' onmouseleave='toData(this)' value='" + $(obj).html().trim() + "'>")
     $(obj).remove()
 }
 
@@ -35,19 +35,41 @@ function toData(obj) {
 
 function saveMenu(obj) {
     let parent = $(obj).parent().parent()
-    let body = {
-        id: parent.attr("id").split("_")[1],
-        image: parent.children("div[name='img']").children().attr("src"),
-        title: parent.children("div[name='attributes']").children("div[name='title']").html().trim(),
-        description: parent.children("div[name='attributes']").children("div[name='description']").html().trim(),
-        price: parseInt(parent.children("div[name='attributes']").children("div[name='price']").html().trim())
+    let productId = parent.attr("id").split("_")[1]
+    if (productId === 'new') {
+        let type = parent.children($("div[name='attributes']")).children("select[name='food_type']").val()
+        let body = {
+            type: type,
+            img: parent.children("div[name='img']").children().attr("src"),
+            title: parent.children("div[name='attributes']").children("div[name='title']").html().trim(),
+            description: parent.children("div[name='attributes']").children("div[name='description']").html().trim(),
+            price: parseFloat(parent.children("div[name='attributes']").children("div[name='price']").html().trim()),
+            isPopular: false
+        }
+        console.log("Add new food: ", body);
+        $.ajax({
+            "url": "update_menu",
+            "type": "POST",
+            "data": body
+        });
+    } else {
+        let type = parent.children($("div[name='attributes']")).children()[0].html().split(" ")[1]
+        let body = {
+            type: type,
+            id: parent.attr("id").split("_")[1],
+            img: parent.children("div[name='img']").children().attr("src"),
+            title: parent.children("div[name='attributes']").children("div[name='title']").html().trim(),
+            description: parent.children("div[name='attributes']").children("div[name='description']").html().trim(),
+            price: parseFloat(parent.children("div[name='attributes']").children("div[name='price']").html().trim())
+        }
+        console.log("Update menu data: ", body);
+        $.ajax({
+            "url": "update_menu",
+            "type": "POST",
+            "data": body
+        });
     }
-    console.log("sending new menu data: ", body);
-    $.ajax({
-        "url": "update_menu",
-        "type": "POST",
-        "data": body
-    });
+
 }
 
 function displayImage(obj) {
@@ -59,7 +81,6 @@ function displayImage(obj) {
     // Create a FormData object and append the file
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
-
     // Make a POST request using the Fetch API
     fetch('new_menu_image', {
             method: 'POST',
@@ -75,7 +96,7 @@ function displayImage(obj) {
 }
 
 function setNewImg(context, data) {
-    $(context).attr("src", "../img/" + data)
+    $(context).attr("src", "../../img/" + data)
 }
 
 function generateNewMenu() {
@@ -85,6 +106,12 @@ function generateNewMenu() {
         <input type='file' id="food_new_img" accept="image/*" onchange="displayImage(this)">
     </div>
     <div name="attributes">
+        Food Type:
+        <select name='food_type'>
+            <option value='pizza'>Pizza</option>
+            <option value='starter'>Starter</option>
+            <option value='salad'>Salad</option>
+        </select>
         <div ondblclick="toInput(this)" name="title">
             default title
         </div>
