@@ -16,21 +16,27 @@ cart.get('/cart',async (req,res,next)=>{
     if(orderList !=undefined){
         var subTotal =0;
         for(let order of orderList){
-            var product = await Product.findProductById(order.type, order.id);
-            subTotal += product.price * order.quantity;
-            var item = {id: order.id, 
-                image:product.img, 
-                title:product.title, 
-                description:product.description,
-                price:product.price,
-                quantity:order.quantity};
-            listOr.push(item);
+            if(order.quantity ==0){
+                orderList.splice(orderList.indexOf(order),1);                
+                res.cookie('cart',orderList);
+            }else{
+                var product = await Product.findProductById(order.type, order.id);
+                subTotal += product.price * order.quantity;
+
+                var item = {id: order.id, 
+                    image:product.img, 
+                    title:product.title, 
+                    description:product.description,
+                    price:product.price,
+                    quantity:order.quantity};
+                listOr.push(item);
+            }
         }
         data.sammury.subTotal =subTotal.toFixed(2);
         data.sammury.tax = (subTotal * 0.1).toFixed(2);
         data.sammury.totalIncl =(subTotal+(subTotal * 0.1) + 15).toFixed(2) ;
         data.listOrders =listOr;
-        data.quantity= orderList.reduce((total, item) => total + item.quantity, 0);
+        data.totalQuantity= orderList.reduce((total, item) => total + item.quantity, 0);
     }
     
     res.cookie('listOrders',listOr);
@@ -69,8 +75,7 @@ cart.post('/updateOrder',async (req,res)=>{
     res.cookie("listOrders", listOrderDetail);
     res.json({subTotal:subTotal,
          quantity:  detailItemUpdate.quantity,
-         totalQuantity:totalQuantity,
-         disabled: detailItemUpdate.quantity == 0 });
+         totalQuantity:totalQuantity});
 })
 cart.post('/onChange',(req,res)=>{  
     var orderList =req.cookies.cart;
