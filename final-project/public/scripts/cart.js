@@ -56,7 +56,6 @@ function summaryValidate(){
 
 }
 
-
 function updateOrder(element){
     var id = $(element).parent().attr("data-id");
     var type =$(element).attr('class');
@@ -68,10 +67,11 @@ function updateOrder(element){
         }
     }).done(function(response) {
         $('input[name="input_quan_' + id + '"]').val(response.quantity);
-        if (response.disabled == true) {
-            $(element).prop('disabled', true);
+        
+        if (response.quantity == 0) {
+          $('.order_item_'+id ).find('.btn_minus').prop('disabled', true);
         } else {
-            $(element).prop('disabled', false);
+          $('.order_item_'+id ).find('.btn_minus').prop('disabled', false);
         }
         if(type =='btn_delete'){
             $('.order_item_'+id).remove();
@@ -91,7 +91,6 @@ function updateOrder(element){
 function changeQuantity(element){
     var id = $(element).parent().attr("data-id");
     var quantity = $(element).val();
-    console.log('quanityt',quantity)
     $.ajax('/onChange',{
         type: 'POST',
         data: {
@@ -128,9 +127,6 @@ function changeQuantity(element){
         var delivery =$('select[name="delivery"] option:selected').val();
         var tax = parseFloat((subTotal*0.1).toFixed(2));
         var total = parseFloat(subTotal) + tax;
-        console.log('subTotal here ',subTotal);
-        console.log('tax',tax);
-        console.log('total',total);
 
         var coupon = $('#coupon_reduce').val();
         if(coupon =='true'){
@@ -147,7 +143,6 @@ function changeQuantity(element){
         }else{
             $('.delivery').text('$0');
         }
-        console.log('subTotal',subTotal)
         $('.sub_total').text('$'+(subTotal.toFixed(2)));
         $('.total_incl').text('$'+(total.toFixed(2)));
         $('.tax').text('$'+tax);
