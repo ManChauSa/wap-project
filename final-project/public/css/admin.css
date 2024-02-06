@@ -1,0 +1,37 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.outer_box {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+}
+
+.nav_pane {
+    background-color: rgb(0, 255, 80);
+    font-size: 20px;
+    height: 100vh;
+}
+
+.nav_pane div {
+    padding: 10px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.menu_present {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    padding: 20px;
+}
+
+.menu_present>div {
+    padding: 20px;
+    font-size: 20px;
+    align-self: center;
+}

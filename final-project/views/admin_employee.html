@@ -1,0 +1,8 @@
+<div>
+    <% for(let emp of employees){ %>
+        <h4><%= emp.name %></h4>
+        <img src="<%= emp.image %>" alt="avatar" width="100px" height="100px">
+        <div><%= emp.position %></div>
+    <% } %>
+</div>
+<button> ADD NEW </button>
