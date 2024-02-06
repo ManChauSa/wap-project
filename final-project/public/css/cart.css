@@ -4,14 +4,7 @@ body{
     background-size: contain;
     /* backdrop-filter: blur(5px); */
     -webkit-backdrop-filter: blur(5px);
-    /* backdrop-filter: blur(5px); */
-    /* color: #3c3c39; */
-    /* display: flex; */
-    /* justify-content: center; */
-    /* height: 100%; */
     font-family: 'Monsterrat', sans-serif;
-    /* position: relative; */
-    /* padding: 0px; */
     margin: 0;
 }
 .content{
@@ -34,7 +27,7 @@ body{
 }
 .content_right {
     width: 30%;    
-    height: 625px;
+    height: 680px;
 }
 .back {
     height: 50px;
@@ -130,12 +123,13 @@ h3.title_product {
     gap: 5px;
 }
 
-.card_infor input {
+/* .card_infor input {
     height: 20px;
-}
+} */
 .total div{
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 .checkout{
     justify-content: center !important;
@@ -143,6 +137,22 @@ h3.title_product {
 }
 .checkout button{
     width: 170px;
+    
+    border: 1px solid gray;
+    height: 35px;
+    margin-top: 28px;
+    /* border-radius: 5px; */
+    text-align: center;
+    align-items: center;
+    padding: 5px 10px;
+    cursor: pointer;
+    
+    /* border: 1px solid #FFF; */
+    background: #f0f0f0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #ccc;
 }
 .price, .delete {
     width: 50px;
@@ -186,11 +196,14 @@ input[type="radio"] {
   }
 
   .cart {
+    margin-bottom: 10px;
+}
+.group_cards {
     display: flex;
     justify-content: center;
 }
 input[name="coupon"]{
-    height: 24px;
+    /* height: 24px; */
     width: 170px;
     margin-top: 15px;
 }
@@ -224,5 +237,8 @@ input[name="coupon"]{
     color: red;
 }
 .total p {
-    margin: 10px 0;
+    margin: 5px 0;
+}
+.mb-3{
+    margin-bottom: 0px  !important;
 }

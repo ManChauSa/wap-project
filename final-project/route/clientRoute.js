@@ -72,6 +72,7 @@ route.post("/order", async (req, res, next) => {
       id: product._id,
       title: product.title,
       quantity: 1,
+      type: type
     };
     if (!cart) {
       cart = [newItem];
