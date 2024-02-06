@@ -1,5 +1,6 @@
 const express = require('express');
 const Product = require("../models/product");
+const nodemailer = require('nodemailer');
 const path =require('path');
 const cart = express.Router();
 
@@ -101,7 +102,18 @@ cart.post('/onChange',(req,res)=>{
 cart.post('/sammary',(req,res)=>{
     let ordersDelivery=[];   
     var listOrderDetail= req.cookies.listOrders;
-
+    var customInfor ={
+        cusName: '',
+        email: '',
+        address: '',
+        city: '',
+        state:'',
+        zip: '',
+        phone:''
+    }
+    if(req.cookies.customInfor != undefined){
+         customInfor = req.cookies.customInfor;
+    }
     for(let item of listOrderDetail){
         var product = {title:item.title, price:item.price, quantity:item.quantity};
         ordersDelivery.push(item);
@@ -123,21 +135,52 @@ cart.post('/sammary',(req,res)=>{
         sub:req.body.sub_total_val,
         tax: tax
     }
-    res.render('checkout',{data:data});
+    res.render('checkout',{data:data,customInfor: customInfor});
 
 })
 
-cart.get('/orderSuccess',(req,res)=>{
+cart.post('/sendMail',(req,res)=>{
     res.clearCookie("cart");
-    res.redirect('/');
-})
-function subTotal(orderList){
-    var result =0;
-    for(let item of orderList){
-        var price =products.find(p=>p.id == item.id).price;
-        result +=item.quantity* price;
+    var customInfor ={
+        cusName: req.body.firstName,
+        email: req.body.mail,
+        address: req.body.street,
+        city: req.body.city,
+        state:req.body.state,
+        zip: req.body.zip,
+        phone: req.body.phone
     }
-    return result;
-}
+    res.cookie('customInfor',customInfor);
+    const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth:{
+            user: 'tiennguyentpm3@gmail.com',
+            pass: 'toff bzib xoce qmzk'
+        }
+    });
+    const mailOptions = {
+        from: 'bangnganv@gmail.com', 
+        to: req.body.mail, 
+        subject: 'Builing order piza', 
+        html:`
+        <h1>Your order has been placed successfully!</h1>
+        <h3>Don't Miss Out on Our Special Pizza Sale!</h3>
+        <p>Dear Pizza Lover,</p>
+        <p>For a limited time only, we're offering a special discount on our delicious pizzas!</p>
+        <p>Get 10% off on all pizza orders placed this week!</p>
+        <p>Hurry up and place your order now with coupon code "FATHERDSDAY"!</p>
+        <p>Best regards,<br>Your Pizza Shop</p>
+    `
+};
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log('Error occurred:', error);
+        }
+        console.log('Email sent:', info.response);
+    });
+    res.json({ statusmail: true});
+})
+
 
 module.exports = cart;

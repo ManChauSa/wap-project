@@ -101,7 +101,7 @@
                         </div>
                         <div class=" ">
                             <label for="cvv" class="form-label">Cvv</label>
-                            <input type="text" class="form-control" id="cvv" placeholder="MM/YY" name="cvv" >
+                            <input type="text" class="form-control" id="cvv" placeholder="123" name="cvv" >
                             <div class="invalid-feedback invali-cvv">
                                 Please provide a valid cvv.
                             </div>
@@ -140,7 +140,6 @@
                         </div>
                         
                         <input type="hidden" name="total" id="total" value="<%= data.sammury.totalIncl %>">
-                        <input type="hidden" name="sub_total_val" id="sub_total_val" value="<%= data.sammury.subTotal %>">
                         <input type="hidden" name="sub_total_val" id="sub_total_val" value="<%= data.sammury.subTotal %>">
                         <% if(data.sammury.subTotal == 0){ %> 
                             <div class="checkout"><button style="pointer-events: none;" type="submit" id="submitBtn" >CHECKOUT</button></div>
