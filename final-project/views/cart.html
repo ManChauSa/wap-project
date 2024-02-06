@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/css/cart.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>  
+    <script src="/scripts/cart.js"></script>
+</head>
+<body>
+    <div class="content">
+    <div class="inner_content">
+        <div class="content_left">
+            <div class="back"><a href="/"><i class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></div>
+            <div class="order__content">
+                <div class="title">
+                    <h1>Order Cart</h1>
+                    <h3 class="total_quan"><%= data.totalQuantity %> item(s)</h3>
+                </div>
+                <ul class="order_list">
+                    <% if(data.listOrders != null){ %> 
+                    <% for(let item of data.listOrders){ %> 
+                    <li class=" order_item order_item_<%= item.id %>">
+                        <img src="<%= item.image %>" alt="">
+                        <div class="item_des">
+                            <h3 class="title_product"><%= item.title %></h3>
+                            <p class="des_produc"><%= item.description %></p>
+                        </div>
+                        <div class="quantity" data-id="<%= item.id %>">
+                            <button type="button" onclick="updateOrder(this)" class="btn_minus"></button>
+                            <input type="text" min="0" onchange="changeQuantity(this)" name="input_quan_<%= item.id %>" value="<%= item.quantity %>">
+                            <button type="button"  onclick="updateOrder(this)"class="btn_plus"></button>
+                        </div>
+                        <div class="price"><p>$<%= item.price %></p></div>
+                        <div class="delete" data-id="<%= item.id %>" > 
+                            <button onclick="updateOrder(this)" class="btn_delete"></button>
+                        </div>
+                    </li>
+                        
+                        
+                    <% }} %>
+                </ul>
+            </div>
+        </div>
+        <div class="content_right">
+            <h3>Summary</h3>
+            <form action="/sammary" class="needs-validation" id="myForm" method="post">
+
+                    <div class="cards">
+                    <div class="cart">
+                        <div class="group_cards">                           
+                    
+                            <label class="radio-image">
+                                <input type="radio" name="card" value="visa" >
+                                <img src="../img/visa.png" alt="visa">
+                            </label>
+                            
+                            <label class="radio-image">
+                                <input type="radio" name="card" value="master" >
+                                <img src="../img/logo.png" alt="master">
+                            </label>
+                            
+                            <label class="radio-image">
+                                <input type="radio" name="card" value="paypal">
+                                <img src="../img/paypal.png" alt="paypal">
+                            </label>
+                            
+                            <label class="radio-image">
+                                <input type="radio" name="card" value="discover">
+                                <img src="../img/discover.png" alt="discover">
+                            </label>
+                        </div>
+                        <div class="invalid-feedback invalid-card">
+                            Please provide a valid card.
+                        </div>
+                    </div>
+                    <div class="card_infor">
+                        <div class=" " >
+                            <label for="name" class="form-label">Cardholders's Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter first name" name="name" >
+                            <div class="invalid-feedback invali-name">
+                                Please provide a valid first name.
+                            </div>
+                        </div>
+                        <div class=" ">
+                            <label for="card_num" class="form-label">Card Number</label>
+                            <input type="text" class="form-control" id="card_num" placeholder="Enter card Number" name="card_num" >
+                            <div class="invalid-feedback invali-num">
+                                Please provide a valid card Number.
+                            </div>
+                        </div>
+                        <div class=" ">
+                            <label for="expiation" class="form-label">Expiration</label>
+                            <input type="text" class="form-control" id="expiation" placeholder="MM/YY" name="expiation" >
+                            <div class="invalid-feedback invali-expiation">
+                                Please provide a valid expiation.
+                            </div>
+                        </div>
+                        <div class=" ">
+                            <label for="cvv" class="form-label">Cvv</label>
+                            <input type="text" class="form-control" id="cvv" placeholder="MM/YY" name="cvv" >
+                            <div class="invalid-feedback invali-cvv">
+                                Please provide a valid cvv.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="total">
+                        <div>
+                            <input type="text" class="form-control" placeholder="Coupon Code" name="coupon" id="">
+                            <div class="btn_coupon" onclick="applyCoupon()"><span>Apply</span></div>
+                        </div>
+                        <div>
+                            <p>Subtotal</p>
+                            <p class="sub_total money">$<%= data.sammury.subTotal %></p>
+                        </div>
+                        <div>
+                            <select style="width: 178px; height: 30px;" onchange="onchangeDelivery()" name="delivery" id="">
+                                <option value="0">Delivery</option>
+                                <option value="1">Pick up</option>
+                            </select>
+                            <p class="money delivery">$15</p>
+                        </div>
+                        <div>
+                            <p>Tax</p>
+                            <p class="money tax">$<%= data.sammury.tax  %></p>
+                        </div>                       
+                        
+                        <div class="coupon_status" style="display: none;">
+                            <p class="coupon_error"></p>
+                            <p class="money coupon_reduce"></p>
+                            <input type="hidden" name="coupon_reduce" id="coupon_reduce" value="">
+                        </div>
+
+                        <div>
+                            <p>Total(Incl.taxes)</p>
+                            <p class="total_incl money">$<%= data.sammury.totalIncl %></p>
+                        </div>
+                        
+                        <input type="hidden" name="total" id="total" value="<%= data.sammury.totalIncl %>">
+                        <input type="hidden" name="sub_total_val" id="sub_total_val" value="<%= data.sammury.subTotal %>">
+                        <input type="hidden" name="sub_total_val" id="sub_total_val" value="<%= data.sammury.subTotal %>">
+                        <% if(data.sammury.subTotal == 0){ %> 
+                            <div class="checkout"><button style="pointer-events: none;" type="submit" id="submitBtn" >CHECKOUT</button></div>
+                         <% }else{ %>
+                            <div class="checkout"><button style="pointer-events: unset;" id="submitBtn" >CHECKOUT</button></div>
+                            <% } %>
+                    </div>
+                </div>             
+            </form>
+        </div>
+    </div>
+    </div>
+    
+</body>
+</html>

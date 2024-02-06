@@ -1,0 +1,147 @@
+body{
+    background: url(../img/Pizza-3007395.jpg);
+    background-position: center;
+    background-size: contain;
+    /* backdrop-filter: blur(5px); */
+    -webkit-backdrop-filter: blur(5px);
+    /* backdrop-filter: blur(5px); */
+    /* color: #3c3c39; */
+    /* display: flex; */
+    /* justify-content: center; */
+    /* height: 100%; */
+    font-family: 'Monsterrat', sans-serif;
+    /* position: relative; */
+    /* padding: 0px; */
+    margin: 0;
+}
+.content{
+    margin-right: auto;
+    margin-left: auto;
+    /* width: 100%; */
+    width: 85%;
+}
+.inner_content {
+    width: 100%;
+    display: flex;
+    margin: 20px 0;
+    justify-content: space-between;  
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+.order_infor {
+    width: 30%;
+}
+
+
+.inner_content {
+    display: flex;
+    justify-content: space-between;
+}
+.bill_infor {
+    width: 65%;
+    margin: 20px;
+}
+.order_infor h3{
+    text-align: center;
+}
+.list_order div{
+    display: flex;
+    justify-content: space-between;
+}
+.list_order {
+    padding: 20px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+.group_name {
+    display: flex;
+    justify-content: space-between;
+}
+.mb-3 {
+    display: flex;
+    justify-content: flex-start;
+}
+label{
+    width: 107px;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    margin-right: 5px;
+}
+.address {
+    display: flex;
+    justify-content: space-between;
+}
+
+.group_address {
+    width: 100%;
+}
+.group_address input{
+    margin-bottom: 16px;
+}
+.form-label {
+    width: 150px;
+    text-align: left;
+}
+label.last_name.form-label {
+    margin-left: 20px;
+}
+.btn_submit{
+    text-align: center;
+}
+.btn.btn-primary {
+    background-color: #fff;
+    color: #666;
+    border: 1px solid gray;
+    border-radius: 5px;
+    text-align: center;
+    align-items: center;
+    border: 1px solid #FFF;
+    background: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #ccc;  
+      width: 200px;
+}
+.btn.btn-primary:hover{
+    background-color: #94ccf5;
+    border: 1px solid #72b8de;
+    box-shadow: 0 0 5px #7694aa;  
+}
+
+.delivery_popup{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 1rem 2rem 2rem 2rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: #f5f6f6;
+    z-index: 1000;
+    width: 350px;
+    height: 150px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    animation: fadeIn 0.5s ease-in-out forwards;
+    overflow: auto;
+}
+.delirevy_title {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 20px;
+}
+.btn_ok{
+    margin-top: 20px;
+    text-align: center;
+}
+.btn_ok button{
+    width: 60px;
+    background-color: #7e8082;
+    border-radius: 5px;
+    border: 1px solid gray;
+    color: #fff;
+}

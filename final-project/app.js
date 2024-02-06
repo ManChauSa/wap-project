@@ -10,7 +10,9 @@ const { mongoConnect } = require("./util/database");
 
 // add routes
 const clientRoute = require("./route/clientRoute");
+const cart = require("./route/cart");
 const admin = require("./route/admin");
+
 // create server
 const app = express();
 
@@ -35,6 +37,7 @@ app.use("/admin", admin);
 
 // apply routes
 app.use(clientRoute);
+app.use(cart);
 
 // error page
 app.use((req, res, next) => {
