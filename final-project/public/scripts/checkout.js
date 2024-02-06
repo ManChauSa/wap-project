@@ -1,68 +1,74 @@
-function openDelivery() {
-
-    $('.delivery_popup').css("display", "block");
-  }
 
   function clickBtnDelivery(){
-    if(summaryValidate()){
-      openDelivery();
+    var data ={      
+      firstName :$('#first_name').val(),  
+      mail :$('#mail_name').val(),  
+      street :$('#address_number').val(),  
+      city :$('#city').val(),  
+      state :$('#state').val(),  
+      zip :$('#zip_code').val(),  
+      phone :$('#phone').val(),  
+    }
+    if(summaryValidate(data)){
+      $.ajax('/sendMail',{
+        type:'POST',
+        data: data
+      }).done(function(response) {
+        
+        openDelivery();
+      }).fail(function(response){
+        console.log('fail')
+      })
     }
 
   }
 
   
-function summaryValidate(){
-  var firstName =$('#first_name').val();  
-  var lastName =$('#last_name').val();  
-  var street =$('#address_number').val();  
-  var city =$('#city').val();  
-  var state =$('#state').val();  
-  var zip =$('#zip_code').val();  
-  var phone =$('#phone').val();  
+function summaryValidate(data){
   
-if (firstName == '') {
+if (data.firstName == '') {
   $('.invali_first_name').css('display','block');
   return false;
 }else{
   $('.invali_first_name').css('display','none');
 }
 
-if (lastName == '') {
-  $('.invali_last_name').css('display','block');
+if (data.mail == '') {
+  $('.invali_email').css('display','block');
   return false;
 }else{
-  $('.invali_last_name').css('display','none');
+  $('.invali_email').css('display','none');
 }
 
-if (street == '') {
+if (data.street == '') {
   $('.invali_street').css('display','block');
   return false;
 }else{
   $('.invali_street').css('display','none');
 }
 
-if (city == '') {
+if (data.city == '') {
   $('.invali_city').css('display','block');
   return false;
 }else{
   $('.invali_city').css('display','none');
 }
 
-if (state == '') {
+if (data.state == '') {
   $('.invali_state').css('display','block');
   return false;
 }else{
   $('.invali_state').css('display','none');
 }
 
-if (zip == '') {
+if (data.zip == '') {
   $('.invali_zip_code').css('display','block');
   return false;
 }else{
   $('.invali_zip_code').css('display','none');
 }
 
-if (phone == '') {
+if (data.phone == '') {
   $('.invali_phone').css('display','block');
   return false;
 }else{
@@ -70,4 +76,8 @@ if (phone == '') {
 }
 return true;
 
+}
+
+function openDelivery() {
+  $('.delivery_popup').css("display", "block");
 }
