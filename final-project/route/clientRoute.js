@@ -62,8 +62,12 @@ route.post("/login", async (req, res, next) => {
 route.post("/order", async (req, res, next) => {
   let username = req.cookies.username;
   let cart = req.cookies.cart;
+  let totalQuantity = 0;
+  let responseSent = false; // Flag to track if response has been sent
+
   if (!username) {
     res.json({ isLogin: false });
+    responseSent = true;
   } else {
     const { id, type } = req.body;
 
@@ -72,8 +76,9 @@ route.post("/order", async (req, res, next) => {
       id: product._id,
       title: product.title,
       quantity: 1,
-      type: type
+      type: type,
     };
+
     if (!cart) {
       cart = [newItem];
     } else {
@@ -85,11 +90,22 @@ route.post("/order", async (req, res, next) => {
       } else {
         cart.push(newItem);
       }
+
+      totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+    }
+
+    res.cookie("cart", cart);
+    const responseData = {
+      isLogin: true,
+      totalQuantity: totalQuantity,
+      cart: cart,
+    };
+
+    if (!responseSent) {
+      res.json(responseData);
+      responseSent = true;
     }
   }
-  const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
-  res.cookie("cart", cart);
-  res.json({ isLogin: true, totalQuantity: totalQuantity, cart: cart });
 });
 
 route.get("/menu", async (req, res, next) => {
