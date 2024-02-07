@@ -59,7 +59,6 @@ router.get("/menu", async(req, res, next) => {
         }
         context.food.splice(0, 0, ...items)
     }
-    console.log(context)
     res.render("admin_menu", context);
 });
 
@@ -100,12 +99,9 @@ router.get("/checkout", async(req, res, next) => {
     for (let user of users) {
         report[user.username] = []
     }
-    console.log(users)
-    console.log(checkouts)
     for (let c of checkouts) {
         report[c.userName].push({ date: c.date, price: c.price })
     }
-    console.log("report: ", report)
     res.render("admin_checkout", { report: report });
 });
 
