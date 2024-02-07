@@ -1,19 +1,39 @@
 <h3>Total Sale Summation</h3>
 <div name="admin_checkout">
-    <table>
+    <table class="checkout_summation">
         <tr>
-            <th>Product ID</th>
-            <th>Total Quantity</th>
+            <th>Username</th>
+            <th>Scammed</th>
+            <th>Date</th>
         </tr>
-        <% for(let productId in report){ %>
-            <tr>
-                <td>
-                    <%= productId %>
-                </td>
-                <td>
-                    <%= report[productId] %>
-                </td>
-            </tr>
-            <%} %>
+        <% for(let user in report) {%>
+            <% if (report[user].length) {%>
+                <% for(let checkoutIndex in report[user]) {%>
+                    <% if (checkoutIndex === "0"){ %>
+                        <tr>
+                            <td rowspan="<%= report[user].length %>">
+                                <%= user %>
+                            </td>
+                            <td>
+                                <%= report[user][checkoutIndex].price %>
+                            </td>
+                            <td>
+                                <%= report[user][checkoutIndex].date %>
+                            </td>
+                        </tr>
+                        <%}%>
+                            <% if (checkoutIndex !== "0") { %>
+                                <tr>
+                                    <td>
+                                        <%= report[user][checkoutIndex].price %>
+                                    </td>
+                                    <td>
+                                        <%= report[user][checkoutIndex].date %>
+                                    </td>
+                                </tr>
+                                <%}%>
+                                    <%} %>
+                                        <%} %>
+                                            <% } %>
     </table>
 </div>
