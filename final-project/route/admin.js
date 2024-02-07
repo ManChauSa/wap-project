@@ -4,6 +4,8 @@ const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const cookieParser = require("cookie-parser");
 const Product = require("../models/product");
+const User = require("../models/user");
+const Checkout = require("../models/checkout");
 const path = require("path");
 
 const options = {
@@ -41,45 +43,6 @@ const fake_employees = {
         },
     ],
 };
-
-const fake_checkout = {
-    checkouts: [{
-            id: 1,
-            product_id: 2,
-            quantity: 3
-        },
-        {
-            id: 2,
-            product_id: 1,
-            quantity: 4
-        },
-        {
-            id: 3,
-            product_id: 3,
-            quantity: 2
-        },
-        {
-            id: 4,
-            product_id: 4,
-            quantity: 67
-        },
-        {
-            id: 5,
-            product_id: 2,
-            quantity: 123
-        },
-        {
-            id: 6,
-            product_id: 2,
-            quantity: 42
-        },
-        {
-            id: 7,
-            product_id: 3,
-            quantity: 12
-        }
-    ]
-}
 
 const foodTypes = ["pizza", "salad", "starter"]
 router.get("/index", (req, res, next) => {
@@ -121,7 +84,7 @@ router.post("/update_menu", (req, res, next) => {
 
 router.post("/new_menu_image", upload.single("file"), (req, res) => {
     const savedFilename = req.file.filename;
-    return res.json({ filename: savedFilename });
+    res.json({ filename: savedFilename });
 });
 
 router.get("/employees", (req, res, next) => {
@@ -129,17 +92,20 @@ router.get("/employees", (req, res, next) => {
     res.render("admin_employee", context);
 });
 
-router.get("/checkout", (req, res, next) => {
-    let data = fake_checkout;
+router.get("/checkout", async(req, res, next) => {
+    let users = await User.getAllUsers()
+    let checkouts = await Checkout.getAllHistory();
     let report = {}
-    for (let frame of data.checkouts) {
-        if (report[frame['product_id']]) {
-            report[frame['product_id']] += frame['quantity']
-        } else {
-            report[frame['product_id']] = frame['quantity']
-        }
+
+    for (let user of users) {
+        report[user.username] = []
     }
-    console.log(report)
+    console.log(users)
+    console.log(checkouts)
+    for (let c of checkouts) {
+        report[c.userName].push({ date: c.date, price: c.price })
+    }
+    console.log("report: ", report)
     res.render("admin_checkout", { report: report });
 });
 
