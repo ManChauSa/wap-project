@@ -141,7 +141,7 @@ cart.post('/sammary',(req,res)=>{
 })
 
 cart.post('/sendMail',async (req,res)=>{
-    var date = new Date().toString().replace(/T/, ':').replace(/\.\w*/, '');
+    var date = new Date();
     const checkoutRecord = new Checkout(req.cookies.username,req.body.total,date);
     await checkoutRecord.save();
     
