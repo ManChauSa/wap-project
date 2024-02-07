@@ -7,7 +7,8 @@
       city :$('#city').val(),  
       state :$('#state').val(),  
       zip :$('#zip_code').val(),  
-      phone :$('#phone').val(),  
+      phone :$('#phone').val(),       
+      total :$('#total').val(),  
     }
     if(summaryValidate(data)){
       $.ajax('/sendMail',{

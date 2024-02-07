@@ -1,5 +1,6 @@
 const express = require('express');
 const Product = require("../models/product");
+const Checkout = require("../models/checkout");
 const nodemailer = require('nodemailer');
 const path =require('path');
 const cart = express.Router();
@@ -44,6 +45,7 @@ cart.get('/cart',async (req,res,next)=>{
     res.render('cart',{data: data});
 
 })
+
 cart.post('/updateOrder',async (req,res)=>{
     var orderList =req.cookies.cart;
     var item = orderList.find(v => v.id == req.body.id);    
@@ -78,6 +80,7 @@ cart.post('/updateOrder',async (req,res)=>{
          quantity:  detailItemUpdate.quantity,
          totalQuantity:totalQuantity});
 })
+
 cart.post('/onChange',(req,res)=>{  
     var orderList =req.cookies.cart;
     var item = orderList.find(v => v.id == req.body.id);    
@@ -96,8 +99,6 @@ cart.post('/onChange',(req,res)=>{
     res.json({ totalQuantity:totalQuantity,
         subTotal:subTotal});
 })
-
-
 
 cart.post('/sammary',(req,res)=>{
     let ordersDelivery=[];   
@@ -139,7 +140,11 @@ cart.post('/sammary',(req,res)=>{
 
 })
 
-cart.post('/sendMail',(req,res)=>{
+cart.post('/sendMail',async (req,res)=>{
+    var date = new Date().toString().replace(/T/, ':').replace(/\.\w*/, '');
+    const checkoutRecord = new Checkout(req.cookies.username,req.body.total,date);
+    await checkoutRecord.save();
+    
     res.clearCookie("cart");
     var customInfor ={
         cusName: req.body.firstName,
@@ -171,15 +176,14 @@ cart.post('/sendMail',(req,res)=>{
         <p>Hurry up and place your order now with coupon code "FATHERDSDAY"!</p>
         <p>Best regards,<br>Your Pizza Shop</p>
     `
-};
-
+    };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             return console.log('Error occurred:', error);
         }
         console.log('Email sent:', info.response);
     });
-    res.json({ statusmail: true});
+    res.json({ success: true });
 })
 
 
