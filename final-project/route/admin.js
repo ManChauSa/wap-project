@@ -44,45 +44,6 @@ const fake_employees = {
     ],
 };
 
-const fake_checkout = {
-    checkouts: [{
-            id: 1,
-            product_id: 2,
-            quantity: 3
-        },
-        {
-            id: 2,
-            product_id: 1,
-            quantity: 4
-        },
-        {
-            id: 3,
-            product_id: 3,
-            quantity: 2
-        },
-        {
-            id: 4,
-            product_id: 4,
-            quantity: 67
-        },
-        {
-            id: 5,
-            product_id: 2,
-            quantity: 123
-        },
-        {
-            id: 6,
-            product_id: 2,
-            quantity: 42
-        },
-        {
-            id: 7,
-            product_id: 3,
-            quantity: 12
-        }
-    ]
-}
-
 const foodTypes = ["pizza", "salad", "starter"]
 router.get("/index", (req, res, next) => {
     let context = {};
