@@ -24,7 +24,8 @@ function unHigh(obj) {
 }
 
 function toInput(obj) {
-    $(obj).before("<input style='height: 40px;width: 500px;' type='text' name='" + $(obj).attr("name") + "' onmouseleave='toData(this)' value='" + $(obj).html().trim() + "'>")
+    let inputText = $(obj).html().trim().replace("'", "&#39").replace('"', "&quot")
+    $(obj).before("<input style='height: 40px;width: 500px;' type='text' name='" + $(obj).attr("name") + "' onmouseleave='toData(this)' value='" + inputText + "'>")
     $(obj).remove()
 }
 
@@ -53,7 +54,8 @@ function saveMenu(obj) {
             "data": body
         });
     } else {
-        let type = parent.children($("div[name='attributes']")).children()[0].html().split(" ")[1]
+        let type = parent.children().children().eq(2).html().trim().split("\n")[1].trim()
+        console.log(type)
         let body = {
             type: type,
             id: parent.attr("id").split("_")[1],
