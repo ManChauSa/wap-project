@@ -1,28 +1,45 @@
-<div name="admin_menu_table" style="overflow-y: scroll;height: 100vh;">
-    <% for(let opt of food){ %>
-        <div class="menu_present" id="food_<%= opt._id %>">
-            <div name="img">
-                <img src="<%= opt.img %>" alt="pizza_img" width="200px" height="200px">
-                <input type='file' id="food_<%= opt._id %>_img" accept="image/*" onchange="displayImage(this)">
-            </div>
-            <div name="attributes">
-                <div>
-                    Food Type:
-                    <%= opt.type %>
-                </div>
-                <div ondblclick="toInput(this)" name="title">
-                    <%= opt.title %>
-                </div>
-                <div ondblclick="toInput(this)" name="description">
-                    <%= opt.description %>
-                </div>
-                <div ondblclick="toInput(this)" name="price">
-                    <%= opt.price %> $
-                </div>
-                <br>
-                <button onclick="saveMenu(this)">Save</button>
-            </div>
+<div
+  name="admin_menu_table"
+  style="overflow-y: scroll; height: 100vh; margin-left: 1rem"
+>
+  <% for(let opt of food){ %>
+  <div class="menu_present" id="food_<%= opt._id %>">
+    <div name="img">
+      <img src="<%= opt.img %>" alt="pizza_img" width="200px" height="200px" />
+      <input
+        type="file"
+        id="food_<%= opt._id %>_img"
+        accept="image/*"
+        onchange="displayImage(this)"
+      />
+    </div>
+    <div name="attributes">
+      <div>
+        <label>Type: </label>
+        <%= opt.type %>
+      </div>
+      <div class="myField" name="myTitle">
+        <label>Title: </label>
+        &nbsp;
+        <div ondblclick="toInput(this)" name="title"><%= opt.title %></div>
+      </div>
+      <div class="myField" name="myDescription">
+        <label>Description:</label>
+        &nbsp;
+        <div ondblclick="toInput(this)" name="description">
+          <%= opt.description %>
         </div>
-        <%} %>
+      </div>
+      <div class="myField" name="myPrice">
+        <label>Price: </label>
+        &nbsp;
+        <div ondblclick="toInput(this)" name="price"><%= opt.price %> $</div>
+      </div>
+
+      <br />
+      <button onclick="saveMenu(this)" class="btn-save">Save</button>
+    </div>
+  </div>
+  <%} %>
 </div>
-<button onclick="generateNewMenu()"> ADD NEW </button>
+<button onclick="generateNewMenu()" class="btn-new">ADD NEW</button>

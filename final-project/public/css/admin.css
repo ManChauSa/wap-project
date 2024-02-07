@@ -1,52 +1,107 @@
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .outer_box {
-    display: grid;
-    grid-template-columns: 1fr 5fr;
+  display: flex;
+  flex-direction: column;
 }
 
 .nav_pane {
-    background-color: rgb(0, 255, 80);
-    font-size: 20px;
-    height: 100vh;
+  background-color: rgb(0, 255, 80);
+  font-size: 20px;
+  display: flex;
+}
+
+.active {
+  background-color: rgb(125, 255, 200) !important;
+  font-weight: bolder;
 }
 
 .nav_pane div {
-    padding: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in;
+}
+
+.nav_pane div:hover {
+  background-color: rgb(125, 255, 200);
+  font-weight: bolder;
 }
 
 body {
-    margin: 0px;
-    padding: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 
 .menu_present {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  padding: 20px;
+  border-bottom: 1px solid gray;
 }
 
-.menu_present>div {
-    padding: 20px;
-    font-size: 20px;
-    align-self: center;
+.menu_present:last-child {
+  border-bottom: none;
 }
 
-.checkout_summation {
-    border: 2px solid black;
-    border-style: double;
-    width: 100%;
+.menu_present > div {
+  padding: 20px;
+  font-size: 20px;
+  align-self: center;
 }
 
-td {
-    vertical-align: top;
-    border-top: 1px solid black;
+.btn-save {
+  padding: 0.7rem 0.9rem;
+  border: none;
+  outline: none;
+  background-color: #ab1919;
+  border-radius: 0.4rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease-in;
 }
 
-tr:nth-child(even) {
-    background-color: beige;
+.btn-save:hover {
+  transform: scale(1.1);
+}
+
+label {
+  font-size: 1.4rem;
+  font-weight: bolder;
+}
+
+.myField {
+  display: flex;
+  align-items: center;
+}
+
+.btn-new {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.8rem 1rem;
+  border: none;
+  background-color: dodgerblue;
+  border-radius: 0.5rem;
+  color: white;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .menu_present {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menu_present div img {
+    width: 15rem;
+    height: 15rem;
+  }
+
+  .menu_present > div {
+    align-self: normal;
+  }
 }
