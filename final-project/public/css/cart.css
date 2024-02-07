@@ -21,6 +21,7 @@ body{
     background-color: #fff;
     padding: 10px;
     border-radius: 5px;
+    min-width: 900px;
 }
 .content_left {
     width: 60%;
