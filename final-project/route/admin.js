@@ -46,63 +46,94 @@ const fake_employees = {
 
 const foodTypes = ["pizza", "salad", "starter"]
 router.get("/index", (req, res, next) => {
-    let context = {};
-    res.render("admin", context);
+    if (req.cookies.admin) {
+        let context = {};
+        res.render("admin", context);
+    } else {
+        res.status(404).json({ error: "Internal Server Error" })
+    }
 });
 
 router.get("/menu", async(req, res, next) => {
-    let context = { food: [] }
-    for (let type of foodTypes) {
-        let items = await Product.getAllProductsByType(type);
-        for (let item of items) {
-            item.type = type
+    if (req.cookies.admin) {
+        let context = { food: [] }
+        for (let type of foodTypes) {
+            let items = await Product.getAllProductsByType(type);
+            for (let item of items) {
+                item.type = type
+            }
+            context.food.splice(0, 0, ...items)
         }
-        context.food.splice(0, 0, ...items)
+        res.render("admin_menu", context);
+    } else {
+        res.status(404).json({ error: "Internal Server Error" })
     }
-    res.render("admin_menu", context);
 });
 
 router.post("/update_menu", (req, res, next) => {
-    let data = req.body;
-    data.price = parseFloat(data.price)
-    let type = data.type
-    delete data.type
-    let productId = data.id;
-    if (productId) {
-        delete data.id;
-        console.log("Update data to product")
-        console.log(productId)
-        console.log(data)
-        Product.updateProductById(type, productId, data);
+    if (req.cookies.admin) {
+        let data = req.body;
+        data.price = parseFloat(data.price)
+        let type = data.type
+        delete data.type
+        let productId = data.id;
+        if (productId) {
+            delete data.id;
+            console.log("Update data to product")
+            console.log(productId)
+            console.log(data)
+            Product.updateProductById(type, productId, data);
+        } else {
+            console.log("Add new data to product")
+            console.log(data)
+            Product.addProduct(type, data);
+        }
     } else {
-        console.log("Add new data to product")
-        console.log(data)
-        Product.addProduct(type, data);
+        res.status(404).json({ error: "Internal Server Error" })
     }
 });
 
 router.post("/new_menu_image", upload.single("file"), (req, res) => {
-    const savedFilename = req.file.filename;
-    res.json({ filename: savedFilename });
+    if (req.cookies.admin) {
+        const savedFilename = req.file.filename;
+        res.json({ filename: savedFilename });
+    } else {
+        res.status(404).json({ error: "Internal Server Error" })
+    }
 });
 
 router.get("/employees", (req, res, next) => {
-    let context = fake_employees;
-    res.render("admin_employee", context);
+    if (req.cookies.admin) {
+        let context = fake_employees;
+        res.render("admin_employee", context);
+    } else {
+        res.status(404).json({ error: "Internal Server Error" })
+    }
 });
 
 router.get("/checkout", async(req, res, next) => {
-    let users = await User.getAllUsers()
-    let checkouts = await Checkout.getAllHistory();
-    let report = {}
+    if (req.cookies.admin) {
+        let users = await User.getAllUsers()
+        let checkouts = await Checkout.getAllHistory();
+        let report = {}
 
-    for (let user of users) {
-        report[user.username] = []
+        for (let user of users) {
+            report[user.username] = []
+        }
+        for (let c of checkouts) {
+            report[c.userName].push({ date: c.date, price: c.price })
+        }
+        res.render("admin_checkout", { report: report });
+    } else {
+        res.status(404).json({ error: "Internal Server Error" })
     }
-    for (let c of checkouts) {
-        report[c.userName].push({ date: c.date, price: c.price })
-    }
-    res.render("admin_checkout", { report: report });
+});
+
+router.get("/logout", (req, res, next) => {
+    res.clearCookie("username");
+    res.clearCookie("cart");
+    res.clearCookie("admin")
+    res.redirect("/");
 });
 
 module.exports = router;
